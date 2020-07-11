@@ -1,0 +1,349 @@
+
+# @Description: ...
+
+# Compose and Docker compatibility matrix.
+# Compose file format: 3.7
+# Docker Engine release: 18.06.0+
+version: "3.7"
+
+# Defining swarm volumes with the DRIVER(local).
+volumes:
+  vol_traefik_cert:
+  vol_redis_data:
+
+# Defining a local network with the DRIVER(bridge).
+networks:
+  network_internal:
+    external: false
+  network_traefik:
+    external: false
+
+# Defining container services for Compose.
+services:
+
+  # Defining a reverse proxy service using Traefik.
+  traefik_server:
+    image: traefik:v2.1.1 # The official Treafik docker image.
+    container_name: traefik-server
+    command:
+      # Enable dashboard Treafik.
+      - "--api.dashboard=true"
+      # Enable docker swarm provider.
+      - "--providers.docker=true"
+      # Define docker socket access.
+      - "--providers.docker.endpoint=unix:///var/run/docker.sock"
+      # Do not expose containers unless explicitly told so.
+      - "--providers.docker.exposedbydefault=false"
+      # Define a default docker network to use for connections to all containers.
+      - "--providers.docker.network=network_traefik"
+      # Traefik will listen to incoming request on the port 80/443 (http/https)
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      # Enable a http challenge named "letsencryptresolver"
+      - "--certificatesresolvers.letsencryptresolver.acme.httpchallenge=true"
+      # Tell it to use our predefined entrypoint named "web"
+      - "--certificatesresolvers.letsencryptresolver.acme.httpchallenge.entrypoint=web"
+      # The email to provide to let's encrypt
+      - "--certificatesresolvers.letsencryptresolver.acme.email=you-email@domain.com"
+      # Tell to store the certificate on a path under our volume
+      - "--certificatesresolvers.letsencryptresolver.acme.storage=/etc/traefik/letsencrypt/acme.json"
+      # Enable Traefik logs.
+      - "--log.level=DEBUG"
+      - "--log.format=common" 
+      - "--log.filePath=/var/log/traefik/traefik.log"
+      # Enable the access logs.
+      - "--accesslog=true"
+      - "--accesslog.filepath=/var/log/traefik/access-log"
+    labels:
+      # Explicitly tell Traefik to expose this container.
+      - "traefik.enable=true"
+
+      # Authorization through external services to check for credentials:
+      # Middleware ForwardAuth for Resources(Traefik, Redis UI, ...)
+      - "traefik.http.middlewares.forwardauth_resources.forwardauth.address=https://auth.docker.localhost/api/v1/authorize/resources"
+      - "traefik.http.middlewares.forwardauth_resources.forwardauth.trustForwardHeader=true"
+      - "traefik.http.middlewares.forwardauth_resources.forwardauth.tls.insecureSkipVerify=true"
+      # Middleware ForwardAuth for Services(Apps)
+      - "traefik.http.middlewares.forwardauth_services.forwardauth.address=https://auth.docker.localhost/api/v1/authorize/services"
+      - "traefik.http.middlewares.forwardauth_services.forwardauth.trustForwardHeader=true"
+      - "traefik.http.middlewares.forwardauth_services.forwardauth.tls.insecureSkipVerify=true"
+
+      # Redirect to https.
+      # Middleware RedirectScheme, redirecting the client to a different scheme/port.
+      - "traefik.http.middlewares.redirect_https.redirectscheme.scheme=https"
+      # Define Routers:
+      - "traefik.http.routers.http-catchall.rule=hostregexp(`{host:.+}`)"
+      - "traefik.http.routers.http-catchall.entrypoints=web"
+      - "traefik.http.routers.http-catchall.middlewares=redirect_https@docker"
+      - "traefik.http.routers.http-catchall.priority=1"
+
+      # Traefik Dashboard Service.
+      # The dashboard is the central place that shows you the current active routes handled by Traefik.
+      # Define Routers:
+      - "traefik.http.routers.dashboard.rule=Host(`traefik.docker.localhost`)"
+      - "traefik.http.routers.dashboard.service=api@internal"
+      - "traefik.http.routers.dashboard.entrypoints=websecure"
+      - "traefik.http.routers.dashboard.tls.certresolver=letsencryptresolver"
+      # The ForwardAuth middleware delegate the authorization to an external service.
+      # - "traefik.http.routers.dashboard.middlewares=forwardauth_resources"
+      - "traefik.http.routers.dashboard.priority=2"
+    restart: unless-stopped
+    volumes:
+      # Define Docker socket access, read only.
+      # So that Traefik can listen to the Docker events
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      # Create a letsencrypt dir within the folder where the docker-compose file is.
+      - "vol_traefik_cert:/etc/traefik/letsencrypt"
+    ports:
+      - "80:80" # The HTTP port.
+      - "443:443" # The HTTPS port.
+      - "8080:8080" # The Web UI (Enabled by --api).
+    networks:
+      - network_traefik
+
+
+  # ...
+  opa_server:
+    image: openpolicyagent/opa:0.20.4
+    container_name: opa-server
+    command: "run --log-level=debug --server --watch /data/policies"
+    restart: always
+    volumes:
+      - "./policies:/data/policies"
+    ports:
+      - "8181:8181"
+    networks:
+      - network_internal
+
+
+  # ...
+  redis_server:
+    image: redis:6.0.5
+    container_name: redis-server
+    environment:
+      - REDIS_REPLICATION_MODE=master
+    command: [
+      "redis-server", "/usr/local/etc/redis/redis.conf"
+    ]
+    restart: always
+    volumes:
+      - "./files/redis-conf/redis-custom.conf:/usr/local/etc/redis/redis.conf"
+      - "vol_redis_data:/data"
+    ports:
+      - "6379:6379"
+    networks:
+      - network_internal
+
+
+  # ...
+  redis_webapp:
+    image: rediscommander/redis-commander:latest
+    container_name: redis-webapp
+    depends_on:
+      - traefik_server
+      - redis_server
+    environment:
+      - REDIS_HOSTS=local:redis_server:6379:0:P@ssW0rd
+      - ADDRESS=0.0.0.0
+      - HTTP_USER=admin
+      - HTTP_PASSWORD=admin
+    labels:
+      # Explicitly tell Traefik to expose this container.
+      - "traefik.enable=true"
+      # The domain the service will respond to.
+      - "traefik.http.routers.redis_commander.rule=Host(`redisui.docker.localhost`)"
+      # Allow request only from the predefined entry point named "websecure"
+      - "traefik.http.routers.redis_commander.entrypoints=websecure"
+      # Define certificate generation based on routers Host & HostSNI rules.
+      - "traefik.http.routers.redis_commander.tls.certresolver=letsencryptresolver"
+      # Tell Traefik to use the port 80 to connect to `redis_commander`
+      - "traefik.http.services.redis_commander.loadbalancer.server.port=8081"
+    restart: always
+    ports:
+      - "0.0.0.0:8081:8081"
+    networks:
+      - network_internal
+      - network_traefik
+
+
+  # ... APP in: ASP.NET Core Web API 
+  authorization_api:
+    image: image/authorization-api
+    container_name: authorization-api
+    build:
+      context: ./projects
+      dockerfile: AuthorizationAPI/Dockerfile
+    depends_on:
+      - traefik_server
+      - redis_server
+    restart: always
+    labels:
+      # Explicitly tell Traefik to expose this container.
+      - "traefik.enable=true"
+      # The domain the service will respond to.
+      - "traefik.http.routers.authorization_api.rule=Host(`auth.docker.localhost`)"
+      # Allow request only from the predefined entry point named "websecure"
+      - "traefik.http.routers.authorization_api.entrypoints=websecure"
+      # Define certificate generation based on routers Host & HostSNI rules.
+      - "traefik.http.routers.authorization_api.tls.certresolver=letsencryptresolver"
+      # Tell Traefik to use the port 80 to connect to `authorization_api`
+      - "traefik.http.services.authorization_api.loadbalancer.server.port=80"
+    networks:
+      - network_internal
+      - network_traefik
+
+
+  # # ...
+  # authentication_api:
+  #   image: image/authentication-api
+  #   container_name: authentication-api
+  #   ...
+  #   networks:
+  #     - network_internal
+  #     - network_traefik
+
+
+  # # ...
+  # authentication_webapp:
+  #   image: image/authentication-webapp
+  #   container_name: authentication-webapp
+  #   ...
+  #   networks:
+  #     - network_internal
+  #     - network_traefik
+
+
+  # # Who Am I - Tiny Go webserver that prints os information
+  # # and HTTP request to output.
+  # whoami:
+  #   image: containous/whoami # The official Containous docker image.
+  #   container_name: whoami-server
+  #   depends_on:
+  #     - traefik_server
+  #   restart: always
+  #   labels:
+  #     # Explicitly tell Traefik to expose this container.
+  #     - "traefik.enable=true"
+  #     # The domain the service will respond to.
+  #     - "traefik.http.routers.whoami.rule=Host(`whoami.docker.localhost`)"
+  #     # Allow request only from the predefined entry point named "websecure"
+  #     - "traefik.http.routers.whoami.entrypoints=websecure"
+  #     # Define certificate generation based on routers Host & HostSNI rules.
+  #     - "traefik.http.routers.whoami.tls.certresolver=letsencryptresolver"
+  #     # Tell Traefik to use the port 80 to connect to `whoami`
+  #     - "traefik.http.services.whoami.loadbalancer.server.port=80"
+  #     # The ForwardAuth middleware delegate the authentication to an external service.
+  #     - "traefik.http.routers.whoami.middlewares=forwardauth_services"
+  #   networks:
+  #     - network_traefik
+
+
+
+
+
+
+
+
+
+
+## APP in: ASP.NET Core Web API 
+
+  # # ...
+  # traefik_forwardauth:
+  #   image: image/forwardauth
+  #   container_name: traefik-forwardauth
+  #   build:
+  #     context: .
+  #     dockerfile: TraefikForwardAuth/ForwardAuthAPI/Dockerfile
+  #   restart: always
+  #   labels:
+  #     # Explicitly tell Traefik to expose this container.
+  #     - "traefik.enable=true"
+  #     # The domain the service will respond to.
+  #     - "traefik.http.routers.traefik_forwardauth.rule=Host(`auth.docker.localhost`)"
+  #     # Allow request only from the predefined entry point named "websecure"
+  #     - "traefik.http.routers.traefik_forwardauth.entrypoints=websecure"
+  #     # Define certificate generation based on routers Host & HostSNI rules.
+  #     - "traefik.http.routers.traefik_forwardauth.tls.certresolver=letsencryptresolver"
+  #     # Tell Traefik to use the port 80 to connect to `traefik_forwardauth`
+  #     - "traefik.http.services.traefik_forwardauth.loadbalancer.server.port=80"
+  #   networks:
+  #     - network_internal
+  #     - network_traefik
+  #     - network_redis
+
+  # # ...
+  # manage_account_api:
+  #   image: image/manage_account_api
+  #   container_name: ctn-manage-account-api
+  #   build:
+  #     context: .
+  #     dockerfile: services/ManageAccountAPI/Dockerfile
+  #   restart: always
+  #   labels:
+  #     # Explicitly tell Traefik to expose this container.
+  #     - "traefik.enable=true"
+  #     # The domain the service will respond to.
+  #     - "traefik.http.routers.manage_account_api.rule=Host(`accountapi.docker.localhost`)"
+  #     # Allow request only from the predefined entry point named "websecure"
+  #     - "traefik.http.routers.manage_account_api.entrypoints=websecure"
+  #     # Define certificate generation based on routers Host & HostSNI rules.
+  #     - "traefik.http.routers.manage_account_api.tls.certresolver=letsencryptresolver"
+  #     # Tell Traefik to use the port 80 to connect to `manage_account_api`
+  #     - "traefik.http.services.manage_account_api.loadbalancer.server.port=80"
+  #   networks:
+  #     - network_local
+
+  # # ...
+  # manage_account_web:
+  #   image: image/manage_account_web
+  #   container_name: ctn-manage-account-web
+  #   build:
+  #     context: .
+  #     dockerfile: services/ManageAccountWeb/Dockerfile
+  #   restart: always
+  #   labels:
+  #     # Explicitly tell Traefik to expose this container.
+  #     - "traefik.enable=true"
+  #     # The domain the service will respond to.
+  #     - "traefik.http.routers.manage_account_web.rule=Host(`account.docker.localhost`)"
+  #     # Allow request only from the predefined entry point named "websecure"
+  #     - "traefik.http.routers.manage_account_web.entrypoints=websecure"
+  #     # Define certificate generation based on routers Host & HostSNI rules.
+  #     - "traefik.http.routers.manage_account_web.tls.certresolver=letsencryptresolver"
+  #     # Tell Traefik to use the port 80 to connect to `manage_account_web`
+  #     - "traefik.http.services.manage_account_web.loadbalancer.server.port=80"
+  #   networks:
+  #   - network_local
+
+
+
+
+
+
+# Middleware BasicAuth, authentication with user and password.
+# - "traefik.http.middlewares.basicauth_traefik_dashboard.basicauth.users=test:$$apr1$$H6uskkkW$$IgXLP6ewTrSuBkTrqE8wj/"
+# - "traefik.http.routers.dashboard.middlewares=basicauth_traefik_dashboard"
+
+
+  # # Who Am I - Tiny Go webserver that prints os information
+  # # and HTTP request to output.
+  # whoami:
+  #   image: containous/whoami # The official Containous docker image.
+  #   container_name: ctn-app-whoami
+  #   restart: always
+  #   labels:
+  #     # Explicitly tell Traefik to expose this container.
+  #     - "traefik.enable=true"
+  #     # The domain the service will respond to.
+  #     - "traefik.http.routers.whoami.rule=Host(`whoami.docker.localhost`)"
+  #     # Allow request only from the predefined entry point named "websecure"
+  #     - "traefik.http.routers.whoami.entrypoints=websecure"
+  #     # Define certificate generation based on routers Host & HostSNI rules.
+  #     - "traefik.http.routers.whoami.tls.certresolver=letsencryptresolver"
+  #     # Tell Traefik to use the port 80 to connect to `whoami`
+  #     - "traefik.http.services.whoami.loadbalancer.server.port=80"
+  #     # The ForwardAuth middleware delegate the authentication to an external service.
+  #     - "traefik.http.routers.whoami.middlewares=forwardauth_services"
+  #   networks:
+  #     - network_local

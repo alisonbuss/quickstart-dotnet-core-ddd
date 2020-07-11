@@ -1,0 +1,10 @@
+{
+  "DatabaseConnectionStrings": {
+    "DefaultConnection": "Data Source=DESKTOP-HVNTI80\\DESENVOLVIMENTO;Initial Catalog=DDD_2020_AULA_UPDATE_MIGRATION;Integrated Security=False;User ID=sa;Password=1234;Connect Timeout=15;Encrypt=False;TrustServerCertificate=False",
+    "DefaultConnectionMssql": "",
+    "DefaultConnectionPostgresql": ""
+  },
+  "CacheConnectionStrings": {
+    "DefaultConnection": ""
+  }
+}

@@ -1,0 +1,49 @@
+
+# @Description: ...
+
+# Compose and Docker compatibility matrix.
+# Compose file format: 3.7
+# Docker Engine release: 18.06.0+
+version: "3.7"
+
+# Defining volumes with the DRIVER(local).
+volumes:
+  vol_shared:
+    name: quickstart_dotnet_core_ddd
+    driver: local
+    driver_opts:
+      type: none
+      # It is necessary that this directory already exists!
+      device: ./volumes/shared
+      o: bind
+
+# Defining a local network with the DRIVER(bridge).
+networks:
+  network_internal:
+    external: false
+
+# Defining container services for Compose.
+services:
+
+  # ...
+  db_mssql_single:
+    image: image/local/mssql
+    build:
+      context: ./services/database-mssql
+      dockerfile: Dockerfile
+    environment:
+      DB_MSSQL_APPLY_DATABASE: 'N'
+      DB_MSSQL_APPLY_RESTORE:  'N'
+      DB_MSSQL_TZ: 'America/Sao_Paulo'
+    restart: always
+    volumes:
+      - vol_shared:/var/opt/mssql/data
+      - vol_shared:/home/app/mssql/shared
+    ports:
+      - "1433:1433"
+    networks:
+      network_internal:
+        aliases:
+          - mssql-single
+          - mssql-single.local.domain.com
+

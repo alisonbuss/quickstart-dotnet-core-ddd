@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Protobuf Include="Protos\greet.proto" GrpcServices="Server" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../../Domain/ExampleUsersDDD.Domain/ExampleUsersDDD.Domain.csproj" />
+    <ProjectReference Include="../../Infra/ExampleUsersDDD.Infra.CrossCutting/ExampleUsersDDD.Infra.CrossCutting.csproj" />
+    <ProjectReference Include="../../Application/ExampleUsersDDD.Application/ExampleUsersDDD.Application.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Grpc.AspNetCore" Version="2.27.0" />
+  </ItemGroup>
+
+</Project>

@@ -19,7 +19,7 @@ namespace ExampleUsersDDD.Application.Mappers
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(x => x.Name))
                 .ForMember(dest => dest.Price, opt => opt.MapFrom(x => x.Price))
-                .ForMember(dest => dest.Status, opt => opt.Ignore())
+                .ForMember(dest => dest.IsActive, opt => opt.Ignore())
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(x => x.Description));
         }
     }

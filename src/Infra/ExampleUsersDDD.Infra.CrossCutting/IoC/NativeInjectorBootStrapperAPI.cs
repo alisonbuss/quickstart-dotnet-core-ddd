@@ -20,19 +20,18 @@ namespace ExampleUsersDDD.Infra.CrossCutting.IoC
         public static void RegisterServices(IServiceCollection services)
         {
             // Domain
-            services.AddSingleton<IServiceProduct, ServiceProduct>();
+            services.AddScoped<IServiceProduct, ServiceProduct>();
 
             // Infra - Data
-            services.AddSingleton(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
-            services.AddSingleton<IRepositoryProduct, RepositoryProduct>();
+            services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
+            services.AddScoped<IRepositoryProduct, RepositoryProduct>();
 
             // Application
-            services.AddSingleton<IAppServiceProduct, AppServiceProduct>();
+            services.AddScoped<IAppServiceProduct, AppServiceProduct>();
 
             // Application - AutoMapper
             services.AddAutoMapper(typeof(EntityToDtoMappingProduct), typeof(DtoToEntityMappingProduct));
 
-            // ...
         }
     }
 }

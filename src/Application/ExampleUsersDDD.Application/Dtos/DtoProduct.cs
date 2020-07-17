@@ -7,34 +7,25 @@ namespace ExampleUsersDDD.Application.Dtos
 {
     public class DtoProduct
     {
-        // [Key]
-        // public Guid Id { get; set; }
-
-        // [Required(ErrorMessage = "The Name is Required")]
-        // [MinLength(2)]
-        // [MaxLength(100)]
-        // [DisplayName("Name")]
-        // public string Name { get; set; }
-
-        // [Required(ErrorMessage = "The E-mail is Required")]
-        // [EmailAddress]
-        // [DisplayName("E-mail")]
-        // public string Email { get; set; }
-
-        // [Required(ErrorMessage = "The BirthDate is Required")]
-        // [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
-        // [DataType(DataType.Date, ErrorMessage = "Data em formato inválido")]
-        // [DisplayName("Birth Date")]
-        // public DateTime BirthDate { get; set; }
-
+        [Key]
         public int Id { get; set; }
 
+        [Required(ErrorMessage = "The Name is Required")]
+        [MinLength(2)]
+        [MaxLength(100)]
         public string Name { get; set; }
 
+        [Required(ErrorMessage = "The Price is Required")]
+        [Range(0, 999.99)]
         public decimal Price { get; set; }
 
-        //public bool Status { get; set; }
+        [Required(ErrorMessage = "The Active is Required")]
+        public bool? IsActive { get; set; }
 
+        [Required(ErrorMessage = "The Description is Required")]
+        [MinLength(10)]
+        [MaxLength(666)]
         public string Description { get; set; }
+
     }
 }

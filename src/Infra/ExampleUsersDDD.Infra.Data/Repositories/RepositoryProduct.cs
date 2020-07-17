@@ -2,21 +2,42 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-
+using System.Threading.Tasks;
 using ExampleUsersDDD.Domain.Entities;
 using ExampleUsersDDD.Domain.Interfaces.Repositories;
+using ExampleUsersDDD.Infra.Data.Context;
+
+using Microsoft.EntityFrameworkCore;
 
 namespace ExampleUsersDDD.Infra.Data.Repositories
 {
     public class RepositoryProduct : RepositoryBase<Product>, IRepositoryProduct
     {
-        // Reading(Consultation):
-        // public async Task<IList<DtoProduct>> getAllByStatus(bool status) OR
-        // public async Task<TEntity> GetByEmail(string email)
-        // {
-        //     return await _dbSet.AsNoTracking().FirstOrDefaultAsync(c => c.Email == email);
-        //     return await _dbSet.AsNoTracking().Where(x => x.Status == true).ToListAsync();
-        // }
+        public RepositoryProduct(DbContextBase dbContext) : base(dbContext)
+        {
+            
+        }
+        
+        public override async Task<Product> GetById(int id)
+        {
+            return await _dbSet.AsNoTracking().FirstOrDefaultAsync(entity => entity.Id == id);
+        }
 
+        public override async Task<Product> Update(Product entity) 
+        {
+            _dbSet.Update(entity);
+            _dbContext.SaveChanges();
+
+            return await Task.FromResult<Product>(entity);
+        }
+
+        public override async Task Remove(Product entity)
+        {
+            _dbSet.Remove(entity);
+            _dbContext.SaveChanges();
+
+            await Task.CompletedTask;
+        }
+       
     }
 }

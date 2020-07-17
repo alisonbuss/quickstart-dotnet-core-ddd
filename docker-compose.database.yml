@@ -32,13 +32,13 @@ services:
       context: ./services/database-mssql
       dockerfile: Dockerfile
     environment:
-      DB_MSSQL_APPLY_DATABASE: 'N'
+      DB_MSSQL_APPLY_DATABASE: 'Y'
       DB_MSSQL_APPLY_RESTORE:  'N'
       DB_MSSQL_TZ: 'America/Sao_Paulo'
     restart: always
-    volumes:
-      - vol_shared:/var/opt/mssql/data
-      - vol_shared:/home/app/mssql/shared
+    # volumes:
+      # - vol_shared:/var/opt/mssql/data
+      # - vol_shared:/home/app/mssql/shared
     ports:
       - "1433:1433"
     networks:

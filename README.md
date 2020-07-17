@@ -1,19 +1,13 @@
 
-
-https://docs.microsoft.com/pt-br/aspnet/core/fundamentals/?view=aspnetcore-3.1&tabs=linux
-
-https://code-maze.com/aspnetcore-webapi-best-practices/
+ADICIONAR DEPENDÊNCIA DO PROJETO:
+ADD PROJECT DEPENDENCY:
 
 
-https://www.youtube.com/watch?v=but7jqjopKM
-
-https://code-maze.com/global-error-handling-aspnetcore/
 
 
-https://code-maze.com/aspnetcore-webapi-best-practices/
 
-https://medium.com/@jelleverheyen/automatically-handle-exceptions-in-dotnet-core-api-2090d2e574dd
-
+ADICIONAR DEPENDÊNCIA DO PACOTE:
+ADD PACKAGE DEPENDENCY:
 
 APP
 dotnet add package AutoMapper --version 10.0.0
@@ -37,20 +31,68 @@ dotnet add package Microsoft.EntityFrameworkCore.Tools --version 3.1.5
 
 
 
+PUBLICAR PROJETO
 
-dotnet restore
-dotnet build
-dotnet run
 
-dotnet run --project ./src/Services/ExampleUsersDDD.Service.API/ExampleUsersDDD.Service.API.csproj
+dotnet tool install --global dotnet-ef
 
-dotnet restore --force --verbosity n
+dotnet ef migrations add Initial --output-dir Migrations --context DbContextMigration --startup-project "./src/Infra/ExampleUsersDDD.Infra.Data" --verbose;
 
-dotnet build --force --verbosity n
+dotnet ef database update --context DbContextMigration --startup-project "./src/Infra/ExampleUsersDDD.Infra.Data" --verbose;
 
-dotnet run --project ./src/Services/ExampleUsersDDD.Service.API/ExampleUsersDDD.Service.API.csproj --force --verbosity n
+
+
+export ASPNETCORE_ENVIRONMENT=Development;
+export ASPNETCORE_ENVIRONMENT=Production;
+
+dotnet restore --force --verbosity n;
+
+dotnet build --configuration Debug --output ./builds/API --verbosity n --force;
+
+dotnet publish --configuration Debug --output ./builds/API/publish --verbosity n --force;
+
+
+dotnet "./builds/API/publish/ExampleUsersDDD.Service.API.dll" --verbosity n --force;
+
+Ou
+
+dotnet run --project ./src/Services/ExampleUsersDDD.Service.API/ExampleUsersDDD.Service.API.csproj --verbosity n --force;
+
 
 dotnet list package
+
+
+
+
+
+https://medium.com/tableless/tratamento-global-de-exceptions-1ad613f58dbd
+
+https://www.wellingtonjhn.com/posts/padroniza%C3%A7%C3%A3o-de-respostas-de-erro-em-apis-com-problem-details/
+
+
+
+
+
+https://docs.microsoft.com/pt-br/aspnet/core/fundamentals/?view=aspnetcore-3.1&tabs=linux
+
+https://code-maze.com/aspnetcore-webapi-best-practices/
+
+
+https://www.youtube.com/watch?v=but7jqjopKM
+
+https://code-maze.com/global-error-handling-aspnetcore/
+
+
+https://code-maze.com/aspnetcore-webapi-best-practices/
+
+https://medium.com/@jelleverheyen/automatically-handle-exceptions-in-dotnet-core-api-2090d2e574dd
+
+
+
+
+
+
+
 
 
 
@@ -114,10 +156,11 @@ STRING DE CONEC
 https://medium.com/old-dev/basic-entityframework-core-192dfdff37f8
 
 
-
+https://www.wellingtonjhn.com/posts/padroniza%C3%A7%C3%A3o-de-respostas-de-erro-em-apis-com-problem-details/
 
 https://codingsight.com/configuation-comparison-dependency-injection-containers/
 
+https://www.meziantou.net/entity-framework-core-specifying-data-type-length-and-precision.htm 
 
 Ju212146357br
 PY488482898BR

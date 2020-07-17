@@ -1,12 +1,12 @@
 {
 	"info": {
-		"_postman_id": "a55483a9-a167-438b-98d7-c125f252b888",
-		"name": "Traefik ForwardAuth Collection",
+		"_postman_id": "f50d6475-0bb6-4d42-8228-15cb809c2e78",
+		"name": "ExampleUsersDDD",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "http://localhost:5000",
+			"name": "Hello World!",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -22,12 +22,12 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:5000/api/authorization/",
+			"name": "ReadAll",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:5000/api/authorization/",
+					"raw": "http://localhost:5000/api/v1/products",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -35,20 +35,20 @@
 					"port": "5000",
 					"path": [
 						"api",
-						"authorization",
-						""
+						"v1",
+						"products"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "http://localhost:5000/api/authorization/authorize/resource",
+			"name": "ReadById",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:5000/api/authorization/authorize/resource",
+					"raw": "http://localhost:5000/api/v1/products/3",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -56,80 +56,25 @@
 					"port": "5000",
 					"path": [
 						"api",
-						"authorization",
-						"authorize",
-						"resource"
+						"v1",
+						"products",
+						"3"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "http://localhost:5000/api/authorization/authorize/service",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:5000/api/authorization/authorize/service",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "5000",
-					"path": [
-						"api",
-						"authorization",
-						"authorize",
-						"service"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "http://localhost:5000/api/authorization/cache?key=Value",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:5000/api/authorization/cache?key=Value",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "5000",
-					"path": [
-						"api",
-						"authorization",
-						"cache"
-					],
-					"query": [
-						{
-							"key": "key",
-							"value": "Value"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "http://localhost:5000/api/authorization/cache",
+			"name": "Create",
 			"request": {
 				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"Key\":\"key01\", \"Value\":\"Value Key 01\"}"
+					"raw": "{\n\t\"Name\", \"Name\",\n\t\"Price\": 1.6,\n\t\"Description\": \"Description\"\n}"
 				},
 				"url": {
-					"raw": "http://localhost:5000/api/authorization/cache",
+					"raw": "http://localhost:5000/api/v1/products",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -137,8 +82,55 @@
 					"port": "5000",
 					"path": [
 						"api",
-						"authorization",
-						"cache"
+						"v1",
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"Id\": 666,\n\t\"Name\", \"Name\",\n\t\"Price\": 1.6,\n\t\"Description\": \"Description\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/v1/products",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"v1",
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Remove",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/v1/products/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"v1",
+						"products",
+						"3"
 					]
 				}
 			},

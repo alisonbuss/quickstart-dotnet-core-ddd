@@ -13,101 +13,78 @@ using ExampleUsersDDD.Infra.Data.Context;
 
 namespace ExampleUsersDDD.Infra.Data.Repositories
 {
+    // https://thecodebuzz.com/efcore-dbcontext-cannot-access-disposed-object-net-core/
+    // https://medium.com/@chathuranga94/unit-of-work-for-asp-net-core-706e71abc9d1
+    // https://medium.com/swlh/creating-a-worker-service-in-asp-net-core-3-0-6af5dc780c80
+
     public class RepositoryBase<TEntity> : IRepositoryBase<TEntity>, IDisposable where TEntity : class
     {
-        private readonly DbContextOptions<ContextBase> _optionsBuilder;
+        protected readonly DbContextBase _dbContext;
+        protected readonly DbSet<TEntity> _dbSet;
 
-        public RepositoryBase()
+        public RepositoryBase(DbContextBase dbContext)
         {
-            this._optionsBuilder = new DbContextOptions<ContextBase>();
+            _dbContext = dbContext;
+            _dbSet = _dbContext.Set<TEntity>();
         }
-
-        // From class:
-
-        public async Task SaveAsync(ContextBase context)
-        {
-            await context.SaveChangesAsync();
-        }
-
 
         // Reading(Consultation):
 
-        public async Task<IEnumerable<TEntity>> GetAll()
+        public virtual async Task<IEnumerable<TEntity>> GetAll()
         {
-            using (var data = new ContextBase(this._optionsBuilder))
-            {
-                return await data.Set<TEntity>().AsNoTracking().ToListAsync();
-            }
+            return await _dbSet.AsNoTracking().ToListAsync();
         }
 
-        public async Task<TEntity> GetById(int id)
+        public virtual async Task<TEntity> GetById(int id)
         {
-            using (var data = new ContextBase(this._optionsBuilder))
-            {
-                return await data.Set<TEntity>().FindAsync(id);
-                //return await data.Set<TEntity>().AsNoTracking().FirstOrDefaultAsync(entity => entity.Id == id);
-            }
+            return await _dbSet.FindAsync(id);
         }
-
 
         // Writing(Persistence):
 
-        public async Task<TEntity> Add(TEntity obj)
+        public virtual async Task<TEntity> Add(TEntity entity)
         {
-            using (var data = new ContextBase(_optionsBuilder))
-            {
-                await data.Set<TEntity>().AddAsync(obj);
-                await data.SaveChangesAsync();
-                return obj;
-            }
+           await _dbSet.AddAsync(entity);
+           await _dbContext.SaveChangesAsync();
+
+           return entity;
         }
 
-        public async Task<TEntity> Update(TEntity obj)
+        public virtual async Task<TEntity> Update(TEntity entity)
         {
-            using (var data = new ContextBase(_optionsBuilder))
-            {
-                data.Set<TEntity>().Update(obj);
-                await data.SaveChangesAsync();
-                return obj;
-            }
-        }
-        
-        public async Task Remove(TEntity obj)
-        {
-            using (var data = new ContextBase(_optionsBuilder))
-            {
-                data.Set<TEntity>().Remove(obj);
-                await data.SaveChangesAsync();
-            }
+            var valueId = (int) typeof(TEntity).GetProperty("Id").GetValue(entity);
+
+            var currentEntity = await GetById(valueId);
+            if (currentEntity == null)
+                throw new System.ArgumentNullException(nameof(currentEntity));
+
+            _dbContext.Entry(currentEntity).CurrentValues.SetValues(entity);
+
+            _dbSet.Update(currentEntity);
+            await _dbContext.SaveChangesAsync();
+
+            return entity;
         }
 
+        public virtual async Task Remove(TEntity entity)
+        {
+            var valueId = (int) typeof(TEntity).GetProperty("Id").GetValue(entity);
 
-        // From Doc Microsoft
-        #region Disposed https://docs.microsoft.com/pt-br/dotnet/standard/garbage-collection/implementing-dispose
-        // Flag: Has Dispose already been called?
-        bool disposed = false;
-        // Instantiate a SafeHandle instance.
-        SafeHandle handle = new SafeFileHandle(IntPtr.Zero, true);
-        // Public implementation of Dispose pattern callable by consumers.
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            var currentEntity = await GetById(valueId);
+            if (currentEntity == null)
+                throw new System.ArgumentNullException(nameof(currentEntity));
+
+            _dbSet.Remove(currentEntity);
+            await _dbContext.SaveChangesAsync();
+
+            // await Task.CompletedTask.ConfigureAwait(false);
+            await Task.CompletedTask;
         }
-        // Protected implementation of Dispose pattern.
-        protected virtual void Dispose(bool disposing)
+
+        public virtual void Dispose()
         {
-            if (disposed)
-                return;
-            if (disposing)
-            {
-                handle.Dispose();
-                // Free any other managed objects here.
-                //
-            }
-            disposed = true;
+            _dbContext.Dispose();
         }
-        #endregion
 
     }
 }

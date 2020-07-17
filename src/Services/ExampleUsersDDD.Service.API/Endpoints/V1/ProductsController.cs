@@ -36,8 +36,6 @@ namespace ExampleUsersDDD.Service.API.Endpoints.V1
         // GET: api/v1/products
         [HttpGet]
         [Route("")]
-        // [ProducesResponseType(StatusCodes.Status200OK)]
-        // [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<IEnumerable<DtoProduct>>> ReadAll()
         {
             var models = await _appServiceProduct.GetAll();
@@ -46,13 +44,9 @@ namespace ExampleUsersDDD.Service.API.Endpoints.V1
             return Ok(models);
         }
 
-         // GET: api/v1/products/3
+         // GET: api/v1/products/666
         [HttpGet]
-        [Route("/{id:int}")]
-        // [ProducesResponseType(StatusCodes.Status200OK)]
-        // [ProducesResponseType(StatusCodes.Status404NotFound)]
-        // [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        // [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Route("{id:int}")]
         public async Task<ActionResult<DtoProduct>> ReadById(int? id)
         {
             if (id == null)
@@ -61,9 +55,7 @@ namespace ExampleUsersDDD.Service.API.Endpoints.V1
             var model = await _appServiceProduct.GetById((int) id);
 
             if (model == null)
-            {
                 return NotFound("Error: The product not found.");
-            }
 
             // return model;
             return Ok(model);
@@ -75,65 +67,30 @@ namespace ExampleUsersDDD.Service.API.Endpoints.V1
         // POST: api/v1/products
         [HttpPost]
         [Route("")]
-        // [ProducesResponseType(StatusCodes.Status200OK)]
-        // [ProducesResponseType(StatusCodes.Status404NotFound)]
-        // [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        // [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<DtoProduct>> Create([FromBody] DtoProduct model)
         {
-            if (model == null)
-                return NotFound();
+            var newModel = await _appServiceProduct.Add(model);
 
-            if (ModelState.IsValid)
-            {
-                var newModel = await _appServiceProduct.AddProduct(model);
-
-                return Ok(newModel);
-            } 
-            else 
-            {
-                return BadRequest(ModelState);
-            }
+            return Ok(newModel);
         }
 
         // PUT: api/v1/products
         [HttpPut]
         [Route("")]
-        // [ProducesResponseType(StatusCodes.Status200OK)]
-        // [ProducesResponseType(StatusCodes.Status404NotFound)]
-        // [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        // [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<DtoProduct>> Update([FromBody] DtoProduct model)
         {
-            if (model == null)
-                return NotFound();
-                
-            if (ModelState.IsValid)
-            {
-                if (await this.ModelExists(model.Id))
-                {
-                    var updatedModel = await _appServiceProduct.UpdateProduct(model);
+            if (!await this.ModelExists(model.Id))
+                return NotFound("Error: It was not possible to find the product to perform the update.");
+            
+            var updatedModel = await _appServiceProduct.Update(model);
+            
 
-                    return Ok(updatedModel);
-                }
-                else 
-                {
-                    return NotFound("Error: It was not possible to find the product to perform the update.");
-                }
-            } 
-            else 
-            {
-                return BadRequest(ModelState);
-            }
+            return Ok(updatedModel);
         }
 
-        // DELETE: api/v1/products/3
+        // DELETE: api/v1/products/33
         [HttpDelete]
-        [Route("/{id:int}")]
-        // [ProducesResponseType(StatusCodes.Status200OK)]
-        // [ProducesResponseType(StatusCodes.Status404NotFound)]
-        // [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        // [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Route("{id:int}")]
         public async Task<ActionResult> Remove(int? id)
         {
             if (id == null)
@@ -141,16 +98,13 @@ namespace ExampleUsersDDD.Service.API.Endpoints.V1
 
             var currentModel = await _appServiceProduct.GetById((int) id);
 
-            if (currentModel != null)
-            {
-                await _appServiceProduct.Remove(currentModel);
-
-                return Ok("The product has been successfully removed!");
-            }
-            else 
-            {
+            if (currentModel == null)
                 return NotFound("Error: It was not possible to find the product to perform the remove.");
-            }
+            
+            await _appServiceProduct.Remove(currentModel);
+
+            // return NoContent();
+            return Ok("The product has been successfully removed!");
         }
 
     }

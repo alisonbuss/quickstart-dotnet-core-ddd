@@ -12,11 +12,11 @@ namespace ExampleUsersDDD.Domain.Services
 {
     public class ServiceProduct : IServiceProduct
     {
-        private readonly IRepositoryProduct _repositoryProduct;
+        private readonly IUnitOfWorkRepository _kraken;
 
-        public ServiceProduct(IRepositoryProduct repositoryProduct)
+        public ServiceProduct(IUnitOfWorkRepository unitOfWorkRepository)
         {
-            _repositoryProduct = repositoryProduct;
+            _kraken = unitOfWorkRepository;
         }
 
         // Reading(Consultation):
@@ -40,7 +40,7 @@ namespace ExampleUsersDDD.Domain.Services
             //     await _repositoryProduct.Add(product);
             // }
 
-            return await _repositoryProduct.Add(product);
+            return await _kraken.RepositoryProduct.Add(product);
         }
 
         public async Task<Product> UpdateProduct(Product product)
@@ -54,7 +54,7 @@ namespace ExampleUsersDDD.Domain.Services
             //     await _repositoryProduct.Update(product);
             // }
 
-            return await _repositoryProduct.Update(product);
+            return await _kraken.RepositoryProduct.Update(product);
         }
         
     }

@@ -20,11 +20,14 @@ namespace ExampleUsersDDD.Infra.CrossCutting.IoC
         public static void RegisterServices(IServiceCollection services)
         {
             // Domain
-            services.AddScoped<IServiceProduct, ServiceProduct>();
+            // services.AddScoped<IServiceProduct, ServiceProduct>();
 
             // Infra - Data
             services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
             services.AddScoped<IRepositoryProduct, RepositoryProduct>();
+
+            // Infra - Data - Unit Of Work
+            services.AddScoped<IUnitOfWorkRepository, UnitOfWorkRepository>();
 
             // Application
             services.AddScoped<IAppServiceProduct, AppServiceProduct>();

@@ -17,16 +17,14 @@ namespace ExampleUsersDDD.Application.Services
 {
     public class AppServiceProduct : IAppServiceProduct
     {
-        private readonly IRepositoryProduct _repositoryProduct;
-        private readonly IServiceProduct _serviceProduct;
+        private readonly IUnitOfWorkRepository _kraken;
+        
         private readonly IMapper _mapper;
 
-        public AppServiceProduct(IRepositoryProduct repositoryProduct, 
-                                 IServiceProduct serviceProduct,
+        public AppServiceProduct(IUnitOfWorkRepository unitOfWorkRepository,
                                  IMapper mapper)
         {
-            _repositoryProduct = repositoryProduct;
-            _serviceProduct = serviceProduct;
+            _kraken = unitOfWorkRepository;
             _mapper = mapper;
         }
 
@@ -34,7 +32,7 @@ namespace ExampleUsersDDD.Application.Services
         public async Task<IEnumerable<DtoProduct>> GetAll()
         {
             return _mapper.Map<IEnumerable<DtoProduct>>(
-                await _repositoryProduct.GetAll()
+                await _kraken.RepositoryProduct.GetAll()
             );
         }
 
@@ -48,52 +46,58 @@ namespace ExampleUsersDDD.Application.Services
         public async Task<DtoProduct> GetById(int id)
         {
             return _mapper.Map<DtoProduct>(
-                await _repositoryProduct.GetById(id)
+                await _kraken.RepositoryProduct.GetById(id)
             );
         }
 
         // Writing(Persistence):
         public async Task<DtoProduct> Add(DtoProduct dtoProduct)
         {
-            var product = _mapper.Map<Product>(dtoProduct);
+            try
+            {
+                var currentProduct = _mapper.Map<Product>(dtoProduct);
 
-            return _mapper.Map<DtoProduct>(
-                await _repositoryProduct.Add(product)
-            );
+                var newProduct = await _kraken.RepositoryProduct.Add(currentProduct);
+                await _kraken.Commit();
+
+                return _mapper.Map<DtoProduct>(newProduct);
+            }
+            catch (Exception exception)
+            {
+                await _kraken.Rollback(); throw exception;
+            }
         }
 
         public async Task<DtoProduct> Update(DtoProduct dtoProduct)
         {
-            var product = _mapper.Map<Product>(dtoProduct);
-            
-            return _mapper.Map<DtoProduct>(
-                await _repositoryProduct.Update(product)
-            );
+            try
+            {
+                var currentProduct = _mapper.Map<Product>(dtoProduct);
+                
+                var updatedProduct = await _kraken.RepositoryProduct.Update(currentProduct);
+                await _kraken.Commit();
+
+                return _mapper.Map<DtoProduct>(updatedProduct);
+            }
+            catch (Exception exception)
+            {
+                await _kraken.Rollback(); throw exception;
+            }
         }
 
         public async Task Remove(DtoProduct dtoProduct)
         {
-            var product = _mapper.Map<Product>(dtoProduct);
-            await _repositoryProduct.Remove(product);
-        }
-
-        // Writing(Persistence): Customized methods:
-        public async Task<DtoProduct> AddProduct(DtoProduct dtoProduct)
-        {
-            var product = _mapper.Map<Product>(dtoProduct);       
-            
-            return _mapper.Map<DtoProduct>(
-                await _serviceProduct.AddProduct(product)
-            );
-        }
-
-        public async Task<DtoProduct> UpdateProduct(DtoProduct dtoProduct)
-        {
-            var product = _mapper.Map<Product>(dtoProduct);
-
-            return _mapper.Map<DtoProduct>(
-                await _serviceProduct.UpdateProduct(product)
-            );
+            try
+            {
+                var currentProduct = _mapper.Map<Product>(dtoProduct);
+                
+                await _kraken.RepositoryProduct.Remove(currentProduct);
+                await _kraken.Commit();
+            }
+            catch (Exception exception)
+            {
+                await _kraken.Rollback(); throw exception;
+            }
         }
 
         // From class:

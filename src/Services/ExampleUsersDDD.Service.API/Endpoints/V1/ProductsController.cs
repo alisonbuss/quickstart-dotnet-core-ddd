@@ -12,6 +12,7 @@ namespace ExampleUsersDDD.Service.API.Endpoints.V1
 {
     [ApiController]
     [Route("api/v1/products")]
+    [Produces("application/json")]
     public class ProductsController : ApiControllerBase
     {
         private readonly IAppServiceProduct _appServiceProduct;
@@ -21,7 +22,6 @@ namespace ExampleUsersDDD.Service.API.Endpoints.V1
             _appServiceProduct = appServiceProduct;
         }
 
-
         // Private Support Methods:
 
         private async Task<bool> ModelExists(int id)
@@ -29,7 +29,6 @@ namespace ExampleUsersDDD.Service.API.Endpoints.V1
             var model = await _appServiceProduct.GetById((int) id);
             return model != null;
         }
-
 
         // Reading(Consultation):
 
@@ -40,7 +39,6 @@ namespace ExampleUsersDDD.Service.API.Endpoints.V1
         {
             var models = await _appServiceProduct.GetAll();
             
-            // return models;
             return Ok(models);
         }
 
@@ -50,6 +48,7 @@ namespace ExampleUsersDDD.Service.API.Endpoints.V1
         public async Task<ActionResult<DtoProduct>> ReadById(int? id)
         {
             if (id == null)
+                //throw new System.ArgumentNullException(nameof(id));
                 return BadRequest("Error: The product ID is null!");
 
             var model = await _appServiceProduct.GetById((int) id);
@@ -57,10 +56,8 @@ namespace ExampleUsersDDD.Service.API.Endpoints.V1
             if (model == null)
                 return NotFound("Error: The product not found.");
 
-            // return model;
             return Ok(model);
         }
-
 
         // Writing(Persistence):
 
@@ -84,7 +81,6 @@ namespace ExampleUsersDDD.Service.API.Endpoints.V1
             
             var updatedModel = await _appServiceProduct.Update(model);
             
-
             return Ok(updatedModel);
         }
 

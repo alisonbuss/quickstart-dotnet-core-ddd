@@ -21,8 +21,5 @@ namespace ExampleUsersDDD.Application.Interfaces
         Task<DtoProduct> Update(DtoProduct dtoProduct);
         Task Remove(DtoProduct dtoProduct);
         
-        // Writing(Persistence): Customized methods:
-        Task<DtoProduct> AddProduct(DtoProduct dtoProduct);
-        Task<DtoProduct> UpdateProduct(DtoProduct dtoProduct);
     }
 }

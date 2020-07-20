@@ -8,8 +8,10 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32.SafeHandles;
 
+using ExampleUsersDDD.Domain.Entities;
 using ExampleUsersDDD.Domain.Interfaces.Repositories;
 using ExampleUsersDDD.Infra.Data.Context;
+
 
 namespace ExampleUsersDDD.Infra.Data.Repositories
 {
@@ -17,7 +19,7 @@ namespace ExampleUsersDDD.Infra.Data.Repositories
     // https://medium.com/@chathuranga94/unit-of-work-for-asp-net-core-706e71abc9d1
     // https://medium.com/swlh/creating-a-worker-service-in-asp-net-core-3-0-6af5dc780c80
 
-    public class RepositoryBase<TEntity> : IRepositoryBase<TEntity>, IDisposable where TEntity : class
+    public class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where TEntity : EntityBase
     {
         protected readonly DbContextBase _dbContext;
         protected readonly DbSet<TEntity> _dbSet;
@@ -37,53 +39,49 @@ namespace ExampleUsersDDD.Infra.Data.Repositories
 
         public virtual async Task<TEntity> GetById(int id)
         {
-            return await _dbSet.FindAsync(id);
+            return await _dbSet.AsNoTracking().FirstOrDefaultAsync(entity => entity.Id == id);
         }
 
         // Writing(Persistence):
 
         public virtual async Task<TEntity> Add(TEntity entity)
         {
-           await _dbSet.AddAsync(entity);
-           await _dbContext.SaveChangesAsync();
+            if (entity == null) 
+                throw new ArgumentNullException(nameof(entity));
 
-           return entity;
+            await _dbSet.AddAsync(entity);
+
+            return entity;
         }
 
         public virtual async Task<TEntity> Update(TEntity entity)
         {
-            var valueId = (int) typeof(TEntity).GetProperty("Id").GetValue(entity);
+            if (entity == null) 
+                throw new ArgumentNullException(nameof(entity));
 
-            var currentEntity = await GetById(valueId);
+            var currentEntity = await GetById(entity.Id);
             if (currentEntity == null)
                 throw new System.ArgumentNullException(nameof(currentEntity));
 
             _dbContext.Entry(currentEntity).CurrentValues.SetValues(entity);
 
             _dbSet.Update(currentEntity);
-            await _dbContext.SaveChangesAsync();
 
-            return entity;
+            return await Task.FromResult<TEntity>(currentEntity);
         }
 
         public virtual async Task Remove(TEntity entity)
         {
-            var valueId = (int) typeof(TEntity).GetProperty("Id").GetValue(entity);
+            if (entity == null) 
+                throw new ArgumentNullException(nameof(entity));
 
-            var currentEntity = await GetById(valueId);
+            var currentEntity = await GetById(entity.Id);
             if (currentEntity == null)
                 throw new System.ArgumentNullException(nameof(currentEntity));
 
             _dbSet.Remove(currentEntity);
-            await _dbContext.SaveChangesAsync();
 
-            // await Task.CompletedTask.ConfigureAwait(false);
             await Task.CompletedTask;
-        }
-
-        public virtual void Dispose()
-        {
-            _dbContext.Dispose();
         }
 
     }

@@ -233,3 +233,139 @@ $ code --install-extension fernandoescolar.vscode-solution-explorer
 
 
 code --install-extension aurentTreguier.vscode-simple-icons
+
+
+
+
+
+
+
+https://www.toptal.com/asp-dot-net/asp-net-web-api-tutorial
+
+How to return data from ASP.NET Core Web API
+Learn the three ways you can return data from your ASP.NET Core Web API action methods
+https://www.infoworld.com/article/3520770/how-to-return-data-from-aspnet-core-web-api.html
+
+https://aregcode.com/blog/2019/dotnetcore-understanding-aspnet-endpoint-routing/
+
+https://vmsdurano.com/asp-net-core-and-web-api-a-custom-wrapper-for-managing-exceptions-and-consistent-responses/
+
+https://www.strathweb.com/2012/06/extending-your-asp-net-web-api-responses-with-useful-metadata/
+
+
+
+[HttpGet]
+[QueryableResult]
+public IQueryable<ExpenseModel> Get()
+{
+    var result = _query.Get();
+    var models = _mapper.Map<Expense, ExpenseModel>(result);
+    return models;
+}
+
+[HttpGet("{id}")]
+public ExpenseModel Get(int id)
+{
+    var item = _query.Get(id);
+    var model = _mapper.Map<ExpenseModel>(item);
+    return model;
+}
+
+
+
+
+
+
+{
+    "Type": "Content",
+    "StatusCode": 200,
+    "Message", "Product successfully registered!",
+    "Result": { 
+        "id": 1,
+        "name": "New Product X",
+        "price": 1.3,
+        "isActive": true,
+        "description": "New Product"
+    },
+    "Meta": {
+        "Method": "POST"
+        "origin": "api/v1/produsts",
+        "RequestTime": "2012-06-03T09:57:58.6265082+02:00",
+        "ResponseTime": "2012-06-03T09:57:58.6265082+02:00",
+    }
+}
+
+{
+    "Type": "NoContent",
+    "StatusCode": 204,
+    "Message", "Product successfully deleted!",
+    "Meta": {
+        "Method": "DELETE"
+        "origin": "api/v1/produsts",
+        "RequestTime": "2012-06-03T09:57:58.6265082+02:00",
+        "ResponseTime": "2012-06-03T09:57:58.6265082+02:00",
+    }
+}
+
+{
+    "Type": "List",
+    "StatusCode": 200,
+    "Results": [
+        {}, {}, {}
+    ],
+    "Meta": {
+        "Method": "GET"
+        "origin": "api/v1/produsts",
+        "RequestTime": "2012-06-03T09:57:58.6265082+02:00",
+        "ResponseTime": "2012-06-03T09:57:58.6265082+02:00",
+    }
+}
+
+{
+    "Type": "DataGrid",
+    "StatusCode": 200,
+    "Results": [
+        {}, {}, {}
+    ],
+    "Total": 3,
+    "Obtained": 3,
+    "Index": 1,
+    "Limit", 10,
+    "Meta": {
+        "Method": "GET"
+        "origin": "api/v1/produsts",
+        "RequestTime": "2012-06-03T09:57:58.6265082+02:00",
+        "ResponseTime": "2012-06-03T09:57:58.6265082+02:00",
+    }
+}
+
+
+
+
+
+
+{
+    "StatusCode": 400,
+    "Message": "Request responded with exceptions.",
+    "ResponseException": {
+        "IsError": true,
+        "ExceptionMessage": "Validation Field Error.",
+        "Details": null,
+        "ReferenceErrorCode": null,
+        "ReferenceDocumentLink": null,
+        "ValidationErrors": [
+            {
+                "Field": "LastName",
+                "Message": "'Last Name' should not be empty."
+            },
+            {
+                "Field": "FirstName",
+                "Message": "'First Name' should not be empty."
+            }
+        ]
+    }
+}
+
+
+
+

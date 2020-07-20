@@ -18,26 +18,7 @@ namespace ExampleUsersDDD.Infra.Data.Repositories
             
         }
         
-        public override async Task<Product> GetById(int id)
-        {
-            return await _dbSet.AsNoTracking().FirstOrDefaultAsync(entity => entity.Id == id);
-        }
 
-        public override async Task<Product> Update(Product entity) 
-        {
-            _dbSet.Update(entity);
-            _dbContext.SaveChanges();
-
-            return await Task.FromResult<Product>(entity);
-        }
-
-        public override async Task Remove(Product entity)
-        {
-            _dbSet.Remove(entity);
-            _dbContext.SaveChanges();
-
-            await Task.CompletedTask;
-        }
        
     }
 }

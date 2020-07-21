@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Http;
 using ExampleUsersDDD.Application.Dtos;
 using ExampleUsersDDD.Application.Interfaces;
 
+using Microsoft.Extensions.Logging;
+
 namespace ExampleUsersDDD.Service.API.Endpoints.V1
 {
     [ApiController]
@@ -17,7 +19,7 @@ namespace ExampleUsersDDD.Service.API.Endpoints.V1
     {
         private readonly IAppServiceProduct _appServiceProduct;
 
-        public ProductsController(IAppServiceProduct appServiceProduct)
+        public ProductsController(ILogger<ProductsController> logger, IAppServiceProduct appServiceProduct) : base(logger)
         {
             _appServiceProduct = appServiceProduct;
         }
@@ -37,6 +39,11 @@ namespace ExampleUsersDDD.Service.API.Endpoints.V1
         [Route("")]
         public async Task<ActionResult<IEnumerable<DtoProduct>>> ReadAll()
         {
+            _logger.LogInformation("dsdasdsadsad########################### ##########################");
+
+            // Test:
+            await Task.Delay(1000);
+
             var models = await _appServiceProduct.GetAll();
             
             return Ok(models);
@@ -48,7 +55,6 @@ namespace ExampleUsersDDD.Service.API.Endpoints.V1
         public async Task<ActionResult<DtoProduct>> ReadById(int? id)
         {
             if (id == null)
-                //throw new System.ArgumentNullException(nameof(id));
                 return BadRequest("Error: The product ID is null!");
 
             var model = await _appServiceProduct.GetById((int) id);

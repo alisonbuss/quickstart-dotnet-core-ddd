@@ -14,6 +14,8 @@ using ExampleUsersDDD.Service.API.Configurations;
 using Microsoft.AspNetCore.Http;
 using ExampleUsersDDD.Infra.Data.Context;
 
+using Serilog;
+
 namespace ExampleUsersDDD.Service.API
 {
     public class Startup
@@ -24,8 +26,8 @@ namespace ExampleUsersDDD.Service.API
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", true, true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
 
             Configuration = builder.Build();
@@ -34,18 +36,16 @@ namespace ExampleUsersDDD.Service.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddLogging();
-
-            // WebAPI Config
+            // WebAPI Config.
             services.AddControllers();
 
-            // Setting DBContexts
+            // Setting DBContexts.
             services.AddDatabaseConfiguration(Configuration);
 
-            // .NET Native DI Abstraction
+            // .NET Native DI Abstraction.
             services.AddDependencyInjectionConfiguration();
 
-            // Details of the problem of the (Model State)
+            // Details of the problem of the (Model State).
             services.AddProblemDetailsModelStateConfiguration();
         }
 
@@ -56,13 +56,16 @@ namespace ExampleUsersDDD.Service.API
             {
                 app.UseDeveloperExceptionPage();
 
-                // Drop the database if it exists
+                // Drop the database if it exists.
                 dbContextBase.Database.EnsureDeleted();
-                // Create the database if it doesn't exist
+                // Create the database if it doesn't exist.
                 dbContextBase.Database.EnsureCreated();
             }
 
-            // Details of the problem of the (Exception Handler)
+            // Middleware that uses Serilog to log requests to Endpoints.
+            app.UseSerilogRequestLogging();
+
+            // Details of the problem of the (Exception Handler).
             app.UseProblemDetailsExceptionHandlerConfiguration(loggerFactory);
 
             app.UseRouting();

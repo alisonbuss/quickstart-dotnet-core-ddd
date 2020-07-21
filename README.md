@@ -1,4 +1,43 @@
 
+
+
+
+
+
+https://code-maze.com/net-core-series/
+To improve your API with some advanced techniques you might want to check out:
+    Paging
+    Filtering
+    Searching
+    Sorting
+    Data Shaping
+    HATEOAS
+https://code-maze.com/paging-aspnet-core-webapi/
+https://code-maze.com/filtering-aspnet-core-webapi/
+https://code-maze.com/searching-aspnet-core-webapi/
+https://github.com/Biarity/Sieve
+
+Operator	Meaning
+==	        Equals
+!=	        Not equals
+>	        Greater than
+<	        Less than
+>=	        Greater than or equal to
+<=	        Less than or equal to
+@=	        Contains
+_=	        Starts with
+!@=	        Does not Contains
+!_=	        Does not Starts with
+@=*	        Case-insensitive string Contains
+_=*	        Case-insensitive string Starts with
+==*	        Case-insensitive string Equals
+!=*	        Case-insensitive string Not equals
+!@=*	    Case-insensitive string does not Contains
+!_=*	    Case-insensitive string does not Starts with
+
+
+
+
 ADICIONAR DEPENDÊNCIA DO PROJETO:
 ADD PROJECT DEPENDENCY:
 
@@ -329,7 +368,7 @@ public ExpenseModel Get(int id)
     ],
     "Total": 3,
     "Obtained": 3,
-    "Index": 1,
+    "Index": 1, OR offset
     "Limit", 10,
     "Meta": {
         "Method": "GET"

@@ -1,7 +1,7 @@
 
-using System;
-using System.Collections.Generic;
-using System.Text;
+// Unit of Work for ASP.NET Core
+// Font: https://medium.com/@chathuranga94/unit-of-work-for-asp-net-core-706e71abc9d1
+
 using System.Threading.Tasks;
 
 namespace ExampleUsersDDD.Domain.Interfaces.Repositories

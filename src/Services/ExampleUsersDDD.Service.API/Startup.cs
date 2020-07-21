@@ -27,7 +27,7 @@ namespace ExampleUsersDDD.Service.API
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: false)
                 .AddEnvironmentVariables();
 
             Configuration = builder.Build();
@@ -62,11 +62,11 @@ namespace ExampleUsersDDD.Service.API
                 dbContextBase.Database.EnsureCreated();
             }
 
-            // Middleware that uses Serilog to log requests to Endpoints.
-            app.UseSerilogRequestLogging();
-
             // Details of the problem of the (Exception Handler).
             app.UseProblemDetailsExceptionHandlerConfiguration(loggerFactory);
+
+            // Middleware that uses Serilog to log requests to Endpoints.
+            app.UseSerilogRequestLogging();
 
             app.UseRouting();
 

@@ -7,13 +7,12 @@ namespace ExampleUsersDDD.Service.API.Endpoints
     [ApiController]
     public abstract class ApiControllerBase : ControllerBase
     {
-        protected readonly ILogger _logger;
-
         public ApiControllerBase(ILogger<ApiControllerBase> logger)
         {
-            _logger = logger;
+            Logger = logger;
         }
 
+        protected ILogger Logger { get; private set; }
 
     }
 }

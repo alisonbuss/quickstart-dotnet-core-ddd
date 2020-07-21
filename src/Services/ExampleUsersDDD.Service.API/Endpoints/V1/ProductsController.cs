@@ -28,6 +28,8 @@ namespace ExampleUsersDDD.Service.API.Endpoints.V1
 
         private async Task<bool> ModelExists(int id)
         {
+            Logger.LogInformation("ProductsController.ModelExists: Call to Method");
+
             var model = await _appServiceProduct.GetById((int) id);
             return model != null;
         }
@@ -39,11 +41,11 @@ namespace ExampleUsersDDD.Service.API.Endpoints.V1
         [Route("")]
         public async Task<ActionResult<IEnumerable<DtoProduct>>> ReadAll()
         {
-            _logger.LogInformation("dsdasdsadsad########################### ##########################");
+            Logger.LogInformation("ProductsController.ReadAll: GET: api/v1/products");
 
-            // Test:
-            await Task.Delay(1000);
-
+            // Testing a delay...
+            await Task.Delay(3666);
+           
             var models = await _appServiceProduct.GetAll();
             
             return Ok(models);
@@ -54,6 +56,8 @@ namespace ExampleUsersDDD.Service.API.Endpoints.V1
         [Route("{id:int}")]
         public async Task<ActionResult<DtoProduct>> ReadById(int? id)
         {
+            Logger.LogInformation($"ProductsController.ReadById: GET: api/v1/products/{id}");
+
             if (id == null)
                 return BadRequest("Error: The product ID is null!");
 
@@ -72,6 +76,8 @@ namespace ExampleUsersDDD.Service.API.Endpoints.V1
         [Route("")]
         public async Task<ActionResult<DtoProduct>> Create([FromBody] DtoProduct model)
         {
+            Logger.LogInformation("ProductsController.Create: POST: api/v1/products");
+
             var newModel = await _appServiceProduct.Add(model);
 
             return Ok(newModel);
@@ -82,6 +88,8 @@ namespace ExampleUsersDDD.Service.API.Endpoints.V1
         [Route("")]
         public async Task<ActionResult<DtoProduct>> Update([FromBody] DtoProduct model)
         {
+            Logger.LogInformation("ProductsController.Update: PUT: api/v1/products");
+
             if (!await this.ModelExists(model.Id))
                 return NotFound("Error: It was not possible to find the product to perform the update.");
             
@@ -95,6 +103,8 @@ namespace ExampleUsersDDD.Service.API.Endpoints.V1
         [Route("{id:int}")]
         public async Task<ActionResult> Remove(int? id)
         {
+            Logger.LogInformation($"ProductsController.Remove: DELETE: api/v1/products/{id}");
+
             if (id == null)
                 return BadRequest("Error: The product ID is null!");
 

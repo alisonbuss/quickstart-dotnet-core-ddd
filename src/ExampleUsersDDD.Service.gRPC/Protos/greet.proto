@@ -1,3 +1,4 @@
+
 syntax = "proto3";
 
 option csharp_namespace = "ExampleUsersDDD.Service.gRPC";

@@ -26,8 +26,8 @@
   </ItemGroup>
 
   <!-- <ItemGroup>
-    <Compile Remove="Migrations\20200630045937_InitialCreate.cs" />
-    <Compile Remove="Migrations\20200630045937_InitialCreate.Designer.cs" />
+    <Compile Remove="Migrations\20200725123331_InitialCreate.cs" />
+    <Compile Remove="Migrations\20200725123331_InitialCreate.Designer.cs" />
   </ItemGroup> -->
 
 </Project>

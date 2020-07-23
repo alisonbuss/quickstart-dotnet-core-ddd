@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace ExampleUsersDDD.Domain.Interfaces.Repositories
 {
@@ -15,5 +14,6 @@ namespace ExampleUsersDDD.Domain.Interfaces.Repositories
         Task<TEntity> Add(TEntity obj);
         Task<TEntity> Update(TEntity obj);
         Task Remove(TEntity obj);
+        
     }
 }

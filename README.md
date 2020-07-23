@@ -72,6 +72,7 @@ dotnet add package Microsoft.EntityFrameworkCore.Tools --version 3.1.5
 
 PUBLICAR PROJETO
 
+InitialCreate
 
 dotnet tool install --global dotnet-ef
 

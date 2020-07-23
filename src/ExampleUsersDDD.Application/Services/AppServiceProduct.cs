@@ -18,8 +18,8 @@ namespace ExampleUsersDDD.Application.Services
         private readonly IMapper mapper;
         private readonly IUnitOfWorkRepository kraken;
 
-        public AppServiceProduct(IMapper mapper,
-                                 IUnitOfWorkRepository unitOfWorkRepository)
+        public AppServiceProduct(
+            IMapper mapper, IUnitOfWorkRepository unitOfWorkRepository)
         {
             this.mapper = mapper;
             this.kraken = unitOfWorkRepository;

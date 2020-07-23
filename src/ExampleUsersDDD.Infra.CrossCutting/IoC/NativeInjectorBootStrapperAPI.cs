@@ -3,8 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 using AutoMapper;
 
-using ExampleUsersDDD.Domain.Interfaces.Services;
-using ExampleUsersDDD.Domain.Services;
+// using ExampleUsersDDD.Domain.Interfaces.Services;
+// using ExampleUsersDDD.Domain.Services;
 
 using ExampleUsersDDD.Domain.Interfaces.Repositories;
 using ExampleUsersDDD.Infra.Data.Repositories;
@@ -29,12 +29,12 @@ namespace ExampleUsersDDD.Infra.CrossCutting.IoC
             // Infra - Data - Unit Of Work
             services.AddScoped<IUnitOfWorkRepository, UnitOfWorkRepository>();
 
-            // Application
-            services.AddScoped<IAppServiceProduct, AppServiceProduct>();
-
             // Application - AutoMapper
             services.AddAutoMapper(typeof(EntityToDtoMappingProduct), typeof(DtoToEntityMappingProduct));
 
+            // Application - AppService
+            services.AddScoped<IAppServiceProduct, AppServiceProduct>();
+            
         }
     }
 }

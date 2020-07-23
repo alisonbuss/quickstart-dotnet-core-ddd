@@ -1,9 +1,10 @@
 
+using System;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using ExampleUsersDDD.Domain.Entities;
-using System;
 
 namespace ExampleUsersDDD.Infra.Data.Mappings
 {    

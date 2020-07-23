@@ -3,25 +3,25 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
-
-using ExampleUsersDDD.Application.Dtos;
-using ExampleUsersDDD.Application.Interfaces;
-
 using Microsoft.Extensions.Logging;
+
+using ExampleUsersDDD.Application.Interfaces;
+using ExampleUsersDDD.Application.Dtos;
 
 namespace ExampleUsersDDD.Service.API.Endpoints.V1
 {
     [ApiController]
     [Route("api/v1/products")]
     [Produces("application/json")]
-    public class ProductsController : ApiControllerBase
+    public class ProductsController : ControllerBaseAPI
     {
-        private readonly IAppServiceProduct _appServiceProduct;
+        private readonly IAppServiceProduct appServiceProduct;
 
-        public ProductsController(ILogger<ProductsController> logger, IAppServiceProduct appServiceProduct) : base(logger)
+        public ProductsController(
+            ILogger<ProductsController> logger, IAppServiceProduct appServiceProduct
+        ) : base(logger)
         {
-            _appServiceProduct = appServiceProduct;
+            this.appServiceProduct = appServiceProduct;
         }
 
         // Private Support Methods:
@@ -30,7 +30,7 @@ namespace ExampleUsersDDD.Service.API.Endpoints.V1
         {
             Logger.LogInformation("ProductsController.ModelExists: Call to Method");
 
-            var model = await _appServiceProduct.GetById((int) id);
+            var model = await this.appServiceProduct.GetById((int) id);
             return model != null;
         }
 
@@ -46,7 +46,7 @@ namespace ExampleUsersDDD.Service.API.Endpoints.V1
             // Testing a delay...
             await Task.Delay(3666);
            
-            var models = await _appServiceProduct.GetAll();
+            var models = await this.appServiceProduct.GetAll();
             
             return Ok(models);
         }
@@ -61,7 +61,7 @@ namespace ExampleUsersDDD.Service.API.Endpoints.V1
             if (id == null)
                 return BadRequest("Error: The product ID is null!");
 
-            var model = await _appServiceProduct.GetById((int) id);
+            var model = await this.appServiceProduct.GetById((int) id);
 
             if (model == null)
                 return NotFound("Error: The product not found.");
@@ -78,7 +78,7 @@ namespace ExampleUsersDDD.Service.API.Endpoints.V1
         {
             Logger.LogInformation("ProductsController.Create: POST: api/v1/products");
 
-            var newModel = await _appServiceProduct.Add(model);
+            var newModel = await this.appServiceProduct.Add(model);
 
             return Ok(newModel);
         }
@@ -93,7 +93,7 @@ namespace ExampleUsersDDD.Service.API.Endpoints.V1
             if (!await this.ModelExists(model.Id))
                 return NotFound("Error: It was not possible to find the product to perform the update.");
             
-            var updatedModel = await _appServiceProduct.Update(model);
+            var updatedModel = await this.appServiceProduct.Update(model);
             
             return Ok(updatedModel);
         }
@@ -108,12 +108,12 @@ namespace ExampleUsersDDD.Service.API.Endpoints.V1
             if (id == null)
                 return BadRequest("Error: The product ID is null!");
 
-            var currentModel = await _appServiceProduct.GetById((int) id);
+            var currentModel = await this.appServiceProduct.GetById((int) id);
 
             if (currentModel == null)
                 return NotFound("Error: It was not possible to find the product to perform the remove.");
             
-            await _appServiceProduct.Remove(currentModel);
+            await this.appServiceProduct.Remove(currentModel);
 
             // return NoContent();
             return Ok("The product has been successfully removed!");

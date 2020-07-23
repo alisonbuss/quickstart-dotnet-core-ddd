@@ -1,13 +1,8 @@
 ﻿
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 using Microsoft.EntityFrameworkCore;
 
 using ExampleUsersDDD.Domain.Entities;
 using ExampleUsersDDD.Infra.Data.Mappings;
-using System.Linq;
 
 namespace ExampleUsersDDD.Infra.Data.Context
 {

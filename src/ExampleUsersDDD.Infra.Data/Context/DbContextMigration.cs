@@ -5,10 +5,10 @@
 // https://code-maze.com/migrations-and-seed-data-efcore/
 
 using System.IO;
+using Microsoft.Extensions.Configuration;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.Extensions.Configuration;
 
 using ExampleUsersDDD.Domain.Entities;
 using ExampleUsersDDD.Infra.Data.Mappings;
@@ -41,25 +41,17 @@ namespace ExampleUsersDDD.Infra.Data.Context
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.Migration.json")
                 .Build();
-
-            var builder = new DbContextOptionsBuilder<DbContextMigration>();
-
             var connectionString = configuration.GetConnectionString("SqlServerConnection");
 
-            // Database
-            // services.AddDbContext<DbContextBase>(options =>
-            //         options.UseInMemoryDatabase(databaseName: "InMemoryDataSource"));
-
-            // services.AddDbContext<DbContextBase>(options =>
-            //         options.UseSqlite(Configuration.GetConnectionString("SqliteConnection")));
-
-            // services.AddDbContext<DbContextBase>(options =>
-            //         options.UseSqlServer(Configuration.GetConnectionString("SqlServerConnection")));
-
-            builder.UseSqlite(connectionString);
+            // Database Connection:
+            var builder = new DbContextOptionsBuilder<DbContextMigration>();
+            // builder.UseInMemoryDatabase(databaseName: "InMemoryDataSource");
+            // Or:
+            // builder.UseSqlite(connectionString);
+            // Or:
+            builder.UseSqlServer(connectionString);
 
             return new DbContextMigration(builder.Options);
         }
     }
-
 }

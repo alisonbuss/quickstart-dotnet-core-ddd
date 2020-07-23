@@ -1,8 +1,11 @@
-﻿using System;
+﻿
+using System;
 
 namespace ExampleUsersDDD.Infra.Cache
 {
     public class Redis
     {
+        
+
     }
 }

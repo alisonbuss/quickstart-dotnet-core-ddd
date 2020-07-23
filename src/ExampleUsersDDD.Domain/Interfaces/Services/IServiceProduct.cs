@@ -1,7 +1,4 @@
 ﻿
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 using ExampleUsersDDD.Domain.Entities;
@@ -16,5 +13,6 @@ namespace  ExampleUsersDDD.Domain.Interfaces.Services
         // Writing(Persistence):
         Task<Product> AddProduct(Product product);
         Task<Product> UpdateProduct(Product product);
+        
     }
 }

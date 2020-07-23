@@ -1,20 +1,17 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-
-using ExampleUsersDDD.Service.API.Configurations;
-using Microsoft.AspNetCore.Http;
-using ExampleUsersDDD.Infra.Data.Context;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 using Serilog;
+
+using ExampleUsersDDD.Infra.Data.Context;
+using ExampleUsersDDD.Service.API.Configurations;
 
 namespace ExampleUsersDDD.Service.API
 {
@@ -27,7 +24,7 @@ namespace ExampleUsersDDD.Service.API
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: false)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
 
             Configuration = builder.Build();
@@ -58,6 +55,7 @@ namespace ExampleUsersDDD.Service.API
 
                 // Drop the database if it exists.
                 dbContextBase.Database.EnsureDeleted();
+                
                 // Create the database if it doesn't exist.
                 dbContextBase.Database.EnsureCreated();
             }

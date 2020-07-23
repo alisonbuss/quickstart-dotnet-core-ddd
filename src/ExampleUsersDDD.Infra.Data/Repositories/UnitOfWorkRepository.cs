@@ -1,6 +1,7 @@
 
 using System;
 using System.Threading.Tasks;
+
 using ExampleUsersDDD.Domain.Interfaces.Repositories;
 using ExampleUsersDDD.Infra.Data.Context;
 
@@ -8,17 +9,17 @@ namespace ExampleUsersDDD.Infra.Data.Repositories
 {
     public class UnitOfWorkRepository : IUnitOfWorkRepository, IDisposable
     {
-        private readonly DbContextBase _dbContext;
-        private bool _disposed;
+        private readonly DbContextBase dbContext;
+        private bool disposed;
 
         public UnitOfWorkRepository(DbContextBase dbContext)
         {
-            this._dbContext = dbContext;
+            this.dbContext = dbContext;
         }
 
         public async Task<int> Commit()
         {
-            int affectedRows = await this._dbContext
+            int affectedRows = await this.dbContext
                 .SaveChangesAsync()
                 .ConfigureAwait(false);
             return affectedRows;
@@ -26,17 +27,17 @@ namespace ExampleUsersDDD.Infra.Data.Repositories
 
         public async Task Rollback()
         {
-            await this._dbContext.DisposeAsync()
+            await this.dbContext.DisposeAsync()
                 .ConfigureAwait(false);
         }
 
         #region Discard Unit Of Work and DbContext.
         private void Dispose(bool disposing)
         {
-            if (!this._disposed)
+            if (!this.disposed)
                 if (disposing)
-                    this._dbContext.Dispose();
-            this._disposed = true;
+                    this.dbContext.Dispose();
+            this.disposed = true;
         }
         public void Dispose()
         {
@@ -47,10 +48,10 @@ namespace ExampleUsersDDD.Infra.Data.Repositories
 
         // ...
 
-        private IRepositoryProduct _repositoryProduct;
-        public IRepositoryProduct RepositoryProduct
+        private IRepositoryProduct repositoryProduct;
+        public  IRepositoryProduct RepositoryProduct
         {
-            get { return _repositoryProduct = _repositoryProduct ?? new RepositoryProduct(_dbContext); }
+            get { return this.repositoryProduct = this.repositoryProduct ?? new RepositoryProduct(this.dbContext); }
         }
 
 

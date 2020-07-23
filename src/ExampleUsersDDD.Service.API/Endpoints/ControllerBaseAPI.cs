@@ -5,9 +5,9 @@ using Microsoft.Extensions.Logging;
 namespace ExampleUsersDDD.Service.API.Endpoints
 {
     [ApiController]
-    public abstract class ApiControllerBase : ControllerBase
+    public abstract class ControllerBaseAPI : ControllerBase
     {
-        public ApiControllerBase(ILogger<ApiControllerBase> logger)
+        public ControllerBaseAPI(ILogger<ControllerBaseAPI> logger)
         {
             Logger = logger;
         }

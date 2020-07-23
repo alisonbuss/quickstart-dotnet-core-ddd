@@ -1,8 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 using Grpc.Core;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
 namespace ExampleUsersDDD.Service.gRPC
@@ -10,6 +8,7 @@ namespace ExampleUsersDDD.Service.gRPC
     public class GreeterService : Greeter.GreeterBase
     {
         private readonly ILogger<GreeterService> _logger;
+
         public GreeterService(ILogger<GreeterService> logger)
         {
             _logger = logger;
@@ -22,5 +21,6 @@ namespace ExampleUsersDDD.Service.gRPC
                 Message = "Hello " + request.Name
             });
         }
+        
     }
 }

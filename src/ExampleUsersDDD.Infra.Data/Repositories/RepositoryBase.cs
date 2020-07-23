@@ -1,17 +1,14 @@
 ﻿
 using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Win32.SafeHandles;
 
 using ExampleUsersDDD.Domain.Entities;
 using ExampleUsersDDD.Domain.Interfaces.Repositories;
-using ExampleUsersDDD.Infra.Data.Context;
 
+using ExampleUsersDDD.Infra.Data.Context;
 
 namespace ExampleUsersDDD.Infra.Data.Repositories
 {
@@ -21,25 +18,25 @@ namespace ExampleUsersDDD.Infra.Data.Repositories
 
     public class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where TEntity : EntityBase
     {
-        protected readonly DbContextBase _dbContext;
-        protected readonly DbSet<TEntity> _dbSet;
+        protected readonly DbContextBase dbContext;
+        protected readonly DbSet<TEntity> dbSet;
 
         public RepositoryBase(DbContextBase dbContext)
         {
-            _dbContext = dbContext;
-            _dbSet = _dbContext.Set<TEntity>();
+            this.dbContext = dbContext;
+            this.dbSet = this.dbContext.Set<TEntity>();
         }
 
         // Reading(Consultation):
 
         public virtual async Task<IEnumerable<TEntity>> GetAll()
         {
-            return await _dbSet.AsNoTracking().ToListAsync();
+            return await this.dbSet.AsNoTracking().ToListAsync();
         }
 
         public virtual async Task<TEntity> GetById(int id)
         {
-            return await _dbSet.AsNoTracking().FirstOrDefaultAsync(entity => entity.Id == id);
+            return await this.dbSet.AsNoTracking().FirstOrDefaultAsync(entity => entity.Id == id);
         }
 
         // Writing(Persistence):
@@ -49,7 +46,7 @@ namespace ExampleUsersDDD.Infra.Data.Repositories
             if (entity == null) 
                 throw new ArgumentNullException(nameof(entity));
 
-            await _dbSet.AddAsync(entity);
+            await this.dbSet.AddAsync(entity);
 
             return entity;
         }
@@ -63,9 +60,9 @@ namespace ExampleUsersDDD.Infra.Data.Repositories
             if (currentEntity == null)
                 throw new System.ArgumentNullException(nameof(currentEntity));
 
-            _dbContext.Entry(currentEntity).CurrentValues.SetValues(entity);
+            this.dbContext.Entry(currentEntity).CurrentValues.SetValues(entity);
 
-            _dbSet.Update(currentEntity);
+            this.dbSet.Update(currentEntity);
 
             return await Task.FromResult<TEntity>(currentEntity);
         }
@@ -79,7 +76,7 @@ namespace ExampleUsersDDD.Infra.Data.Repositories
             if (currentEntity == null)
                 throw new System.ArgumentNullException(nameof(currentEntity));
 
-            _dbSet.Remove(currentEntity);
+            this.dbSet.Remove(currentEntity);
 
             await Task.CompletedTask;
         }

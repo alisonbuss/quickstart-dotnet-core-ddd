@@ -1,22 +1,19 @@
 ﻿
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 using ExampleUsersDDD.Domain.Entities;
-using ExampleUsersDDD.Domain.Interfaces.Repositories;
 using ExampleUsersDDD.Domain.Interfaces.Services;
+using ExampleUsersDDD.Domain.Interfaces.Repositories;
 
 namespace ExampleUsersDDD.Domain.Services
 {
     public class ServiceProduct : IServiceProduct
     {
-        private readonly IUnitOfWorkRepository _kraken;
+        private readonly IUnitOfWorkRepository kraken;
 
         public ServiceProduct(IUnitOfWorkRepository unitOfWorkRepository)
         {
-            _kraken = unitOfWorkRepository;
+            this.kraken = unitOfWorkRepository;
         }
 
         // Reading(Consultation):
@@ -37,10 +34,10 @@ namespace ExampleUsersDDD.Domain.Services
             // {
             //     product.Status = true;
 
-            //     await _repositoryProduct.Add(product);
+            //     await this.kraken.repositoryProduct.Add(product);
             // }
 
-            return await _kraken.RepositoryProduct.Add(product);
+            return await this.kraken.RepositoryProduct.Add(product);
         }
 
         public async Task<Product> UpdateProduct(Product product)
@@ -51,10 +48,10 @@ namespace ExampleUsersDDD.Domain.Services
 
             // if (validateName && validatePrice)
             // {
-            //     await _repositoryProduct.Update(product);
+            //     await this.kraken.repositoryProduct.Update(product);
             // }
 
-            return await _kraken.RepositoryProduct.Update(product);
+            return await this.kraken.RepositoryProduct.Update(product);
         }
         
     }

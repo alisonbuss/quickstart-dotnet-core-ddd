@@ -1,13 +1,8 @@
 ﻿
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 using ExampleUsersDDD.Domain.Entities;
 using ExampleUsersDDD.Domain.Interfaces.Repositories;
-using ExampleUsersDDD.Infra.Data.Context;
 
-using Microsoft.EntityFrameworkCore;
+using ExampleUsersDDD.Infra.Data.Context;
 
 namespace ExampleUsersDDD.Infra.Data.Repositories
 {
@@ -18,7 +13,6 @@ namespace ExampleUsersDDD.Infra.Data.Repositories
             
         }
         
-
-       
+        
     }
 }

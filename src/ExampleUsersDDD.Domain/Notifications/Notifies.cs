@@ -1,7 +1,6 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace ExampleUsersDDD.Domain.Notifications
 {
@@ -25,7 +24,7 @@ namespace ExampleUsersDDD.Domain.Notifications
         {
             if (string.IsNullOrWhiteSpace(value) || string.IsNullOrWhiteSpace(propertyName))
             {
-                Notitycoes.Add(new Notifies
+                this.Notitycoes.Add(new Notifies
                 {
                     Message = "Required field",
                     PropertyName = propertyName
@@ -39,7 +38,7 @@ namespace ExampleUsersDDD.Domain.Notifications
         {
             if (value < 1 || string.IsNullOrWhiteSpace(propertyName))
             {
-                Notitycoes.Add(new Notifies
+                this.Notitycoes.Add(new Notifies
                 {
                     Message = "The value must be greater than 0",
                     PropertyName = propertyName
@@ -53,7 +52,7 @@ namespace ExampleUsersDDD.Domain.Notifications
         {
             if (value < 1 || string.IsNullOrWhiteSpace(propertyName))
             {
-                Notitycoes.Add(new Notifies
+                this.Notitycoes.Add(new Notifies
                 {
                     Message = "The value must be greater than 0",
                     PropertyName = propertyName

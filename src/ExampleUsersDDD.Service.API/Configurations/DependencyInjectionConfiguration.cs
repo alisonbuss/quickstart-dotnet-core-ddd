@@ -16,5 +16,6 @@ namespace ExampleUsersDDD.Service.API.Configurations
             // Where all the magic happens...
             NativeInjectorBootStrapperAPI.RegisterServices(services);
         }
+
     }
 }

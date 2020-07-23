@@ -6,12 +6,12 @@
 
   <ItemGroup>
     <!-- Domain -->
-    <ProjectReference Include="../../Domain/ExampleUsersDDD.Domain/ExampleUsersDDD.Domain.csproj" />
+    <ProjectReference Include="../ExampleUsersDDD.Domain/ExampleUsersDDD.Domain.csproj" />
     <!-- Infra -->
-    <ProjectReference Include="../../Infra/ExampleUsersDDD.Infra.Data/ExampleUsersDDD.Infra.Data.csproj" />
-    <ProjectReference Include="../../Infra/ExampleUsersDDD.Infra.Cache/ExampleUsersDDD.Infra.Cache.csproj" />
+    <ProjectReference Include="../ExampleUsersDDD.Infra.Data/ExampleUsersDDD.Infra.Data.csproj" />
+    <ProjectReference Include="../ExampleUsersDDD.Infra.Cache/ExampleUsersDDD.Infra.Cache.csproj" />
     <!-- Application -->
-    <ProjectReference Include="../../Application/ExampleUsersDDD.Application/ExampleUsersDDD.Application.csproj" />
+    <ProjectReference Include="../ExampleUsersDDD.Application/ExampleUsersDDD.Application.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -5,9 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../../Infra/ExampleUsersDDD.Infra.Data/ExampleUsersDDD.Infra.Data.csproj" />
-    <ProjectReference Include="../../Infra/ExampleUsersDDD.Infra.CrossCutting/ExampleUsersDDD.Infra.CrossCutting.csproj" />
-    <ProjectReference Include="../../Application/ExampleUsersDDD.Application/ExampleUsersDDD.Application.csproj" />
+    <ProjectReference Include="../ExampleUsersDDD.Infra.Data/ExampleUsersDDD.Infra.Data.csproj" />
+    <ProjectReference Include="../ExampleUsersDDD.Infra.CrossCutting/ExampleUsersDDD.Infra.CrossCutting.csproj" />
+    <ProjectReference Include="../ExampleUsersDDD.Application/ExampleUsersDDD.Application.csproj" />
   </ItemGroup>
 
   <ItemGroup>

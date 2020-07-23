@@ -9,9 +9,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../../Domain/ExampleUsersDDD.Domain/ExampleUsersDDD.Domain.csproj" />
-    <ProjectReference Include="../../Infra/ExampleUsersDDD.Infra.CrossCutting/ExampleUsersDDD.Infra.CrossCutting.csproj" />
-    <ProjectReference Include="../../Application/ExampleUsersDDD.Application/ExampleUsersDDD.Application.csproj" />
+    <ProjectReference Include="../ExampleUsersDDD.Domain/ExampleUsersDDD.Domain.csproj" />
+    <ProjectReference Include="../ExampleUsersDDD.Infra.CrossCutting/ExampleUsersDDD.Infra.CrossCutting.csproj" />
+    <ProjectReference Include="../ExampleUsersDDD.Application/ExampleUsersDDD.Application.csproj" />
   </ItemGroup>
 
   <ItemGroup>

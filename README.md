@@ -75,9 +75,9 @@ PUBLICAR PROJETO
 
 dotnet tool install --global dotnet-ef
 
-dotnet ef migrations add Initial --output-dir Migrations --context DbContextMigration --startup-project "./src/Infra/ExampleUsersDDD.Infra.Data" --verbose;
+dotnet ef migrations add Initial --output-dir Migrations --context DbContextMigration --startup-project "./src/ExampleUsersDDD.Infra.Data" --verbose;
 
-dotnet ef database update --context DbContextMigration --startup-project "./src/Infra/ExampleUsersDDD.Infra.Data" --verbose;
+dotnet ef database update --context DbContextMigration --startup-project "./src/ExampleUsersDDD.Infra.Data" --verbose;
 
 
 
@@ -95,7 +95,7 @@ dotnet "./builds/API/publish/ExampleUsersDDD.Service.API.dll" --verbosity n --fo
 
 Ou
 
-dotnet run --project ./src/Services/ExampleUsersDDD.Service.API/ExampleUsersDDD.Service.API.csproj --verbosity n --force;
+dotnet run --project ./src/ExampleUsersDDD.Service.API/ExampleUsersDDD.Service.API.csproj --verbosity n --force;
 
 
 dotnet list package

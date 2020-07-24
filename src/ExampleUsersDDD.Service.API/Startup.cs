@@ -12,6 +12,8 @@ using Serilog;
 
 using ExampleUsersDDD.Infra.Data.Context;
 using ExampleUsersDDD.Service.API.Configurations;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
 
 namespace ExampleUsersDDD.Service.API
 {
@@ -65,6 +67,14 @@ namespace ExampleUsersDDD.Service.API
 
             // Middleware that uses Serilog to log requests to Endpoints.
             app.UseSerilogRequestLogging();
+
+            // Serve static files.
+            app.UseFileServer(new FileServerOptions
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "StaticFiles/public")),
+                RequestPath = "/doc",
+                EnableDirectoryBrowsing = true
+            });
 
             app.UseRouting();
 

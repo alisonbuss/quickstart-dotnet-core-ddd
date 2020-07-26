@@ -1,4 +1,6 @@
 
+using System.IO;
+
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -7,13 +9,12 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 
 using Serilog;
 
 using ExampleUsersDDD.Infra.Data.Context;
 using ExampleUsersDDD.Service.API.Configurations;
-using Microsoft.Extensions.FileProviders;
-using System.IO;
 
 namespace ExampleUsersDDD.Service.API
 {
@@ -54,12 +55,6 @@ namespace ExampleUsersDDD.Service.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-
-                // Drop the database if it exists.
-                dbContextBase.Database.EnsureDeleted();
-                
-                // Create the database if it doesn't exist.
-                dbContextBase.Database.EnsureCreated();
             }
 
             // Details of the problem of the (Exception Handler).
@@ -67,6 +62,9 @@ namespace ExampleUsersDDD.Service.API
 
             // Middleware that uses Serilog to log requests to Endpoints.
             app.UseSerilogRequestLogging();
+
+            // Use initial database configurations.
+            app.UseDatabaseConfiguration(env, dbContextBase);
 
             // Serve static files.
             app.UseFileServer(new FileServerOptions

@@ -17,6 +17,9 @@ namespace ExampleUsersDDD.Infra.Data.Mappings
                 throw new ArgumentNullException(nameof(builder));
             }
 
+            // Define specific table name.
+            builder.ToTable("Products");
+
             // Create primary key: 
             builder
                 .HasKey(entity => entity.Id);
@@ -24,6 +27,8 @@ namespace ExampleUsersDDD.Infra.Data.Mappings
             // builder.Property(entity => entity.Id)
             //     .HasColumnName("Id")
             //     .UseSerialColumn();
+
+            // Columns:
 
             builder.Property(entity => entity.Name)
                 .HasColumnType("varchar(100)")
@@ -34,9 +39,9 @@ namespace ExampleUsersDDD.Infra.Data.Mappings
                 .HasColumnType("decimal(5,2)")
                 .IsRequired();
 
-            // builder.Property(entity => entity.IsActive)
-            //     .HasColumnName("Active")
-            //     .HasColumnType("bit");
+            builder.Property(entity => entity.IsActive)
+                .HasColumnName("Active")
+                .HasColumnType("bit");
 
             builder.Property(entity => entity.Description)
                 .HasColumnType("varchar(333)")

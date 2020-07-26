@@ -34,6 +34,18 @@ namespace ExampleUsersDDD.Infra.Data.Repositories
             return await this.dbSet.AsNoTracking().ToListAsync();
         }
 
+        // public async Task<IUser> GetUser(ExternalUserId externalUserId)
+        // {
+        //     User user = await this._context
+        //         .Users
+        //         .Where(a => a.ExternalUserId.Equals(externalUserId))
+        //         .SingleOrDefaultAsync()
+        //         .ConfigureAwait(false);
+
+        //     return user;
+        // }
+
+
         public virtual async Task<TEntity> GetById(int id)
         {
             return await this.dbSet.AsNoTracking().FirstOrDefaultAsync(entity => entity.Id == id);

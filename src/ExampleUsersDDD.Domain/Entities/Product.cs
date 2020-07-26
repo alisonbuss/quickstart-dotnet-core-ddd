@@ -1,4 +1,6 @@
 ﻿
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace ExampleUsersDDD.Domain.Entities
 {
     public class Product : EntityBase

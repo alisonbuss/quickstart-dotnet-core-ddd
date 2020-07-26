@@ -276,7 +276,7 @@ code --install-extension aurentTreguier.vscode-simple-icons
 
 
 
-
+ // Font: https://www.tektutorialshub.com/entity-framework/ef-fluent-api-property-mappings/
 
 
 
@@ -408,4 +408,11 @@ public ExpenseModel Get(int id)
 
 
 
+
+### Licença
+
+Este projeto está licenciado sob os termos da licença MIT.
+
+[<img width="190" src="https://raw.githubusercontent.com/alisonbuss/my-licenses/master/files/logo-open-source-550x200px.png">](https://opensource.org/licenses)
+[<img width="166" src="https://raw.githubusercontent.com/alisonbuss/my-licenses/master/files/icon-license-mit-500px.png">](https://github.com/alisonbuss/quickstart-traefik2/blob/master/LICENSE)
 

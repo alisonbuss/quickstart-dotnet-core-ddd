@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 using ExampleUsersDDD.Domain.Entities;
 using ExampleUsersDDD.Infra.Data.Context;
+using System.IO;
 
 namespace ExampleUsersDDD.Service.API.Configurations
 {
@@ -48,14 +49,16 @@ namespace ExampleUsersDDD.Service.API.Configurations
                 // Create the database if it doesn't exist.
                 dbContextBase.Database.EnsureCreated();
 
-                // Add Users for Test:
-                dbContextBase.Set<User>().Add(new User("lucifer@formhell.com", "666", DateTime.Today, false, true, "System"));
-                dbContextBase.Set<User>().Add(new User("beelzebub@formhell.com", "password666", DateTime.Today, false, true, "System"));
-                dbContextBase.Set<User>().Add(new User("mammon@formhell.com", "password666", DateTime.Today, false, true, "System"));
-                dbContextBase.Set<User>().Add(new User("azazel@formhell.com", "password666", DateTime.Today, false, true, "System"));
-                dbContextBase.Set<User>().Add(new User("asmodeus@formhell.com", "password666", DateTime.Today, false, true, "System"));
-                dbContextBase.Set<User>().Add(new User("leviathan@formhell.com", "password666", DateTime.Today, false, true, "System"));
-                dbContextBase.Set<User>().Add(new User("belphegor@formhell.com", "password666", DateTime.Today, false, true, "System"));
+                // Add 7 initial users to the system for testing:
+                foreach (var user in "lucifer,beelzebub,mammon,azazel,asmodeus,leviathan,belphegor".Split(','))
+                {
+                    var newUser = new User(
+                        $"{user}@formhell.com",  // Email
+                        "P@ssw0rdT0He11666",     // Password
+                        "Fallen Angels"          // Group
+                    );
+                    dbContextBase.Set<User>().Add(newUser);
+                }
                 dbContextBase.SaveChanges();
             }
 

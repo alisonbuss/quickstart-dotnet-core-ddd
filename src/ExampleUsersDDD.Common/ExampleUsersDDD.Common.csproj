@@ -5,7 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../ExampleUsersDDD.Common/ExampleUsersDDD.Common.csproj" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.5" />
+    <PackageReference Include="FluentValidation" Version="9.0.1" />
   </ItemGroup>
 
 </Project>

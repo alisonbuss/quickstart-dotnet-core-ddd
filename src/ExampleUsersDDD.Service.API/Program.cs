@@ -30,33 +30,43 @@ namespace ExampleUsersDDD.Service.API
             }
         }
 
+        // public static IHostBuilder CreateHostBuilder(string[] args) =>
+        //     Host.CreateDefaultBuilder(args)
+        //         .UseSerilog()
+        //         .ConfigureAppConfiguration((hostingContext, config) =>
+        //         {
+        //             // FONT: https://github.com/serilog/serilog-sinks-file
+        //             // FONT: https://github.com/serilog/serilog-sinks-console
+        //             // Serilog.Log.Logger = new Serilog.LoggerConfiguration()
+        //             //     .WriteTo.Console()
+        //             //     .WriteTo.File("log_service_api_.txt", 
+        //             //         rollingInterval: RollingInterval.Day, 
+        //             //         fileSizeLimitBytes: 666666, 
+        //             //         rollOnFileSizeLimit: true
+        //             //     )
+        //             //     .CreateLogger();
+
+        //             // Or
+
+        //             // FONT: https://github.com/serilog/serilog-settings-configuration
+        //             var appsettings = config.Build();
+        //             Serilog.Log.Logger = new Serilog.LoggerConfiguration()
+        //                 .ReadFrom.Configuration(appsettings)
+        //                 .CreateLogger();
+        //         })
+        //         .ConfigureWebHostDefaults(webBuilder =>
+        //         {
+        //             webBuilder.UseStartup<Startup>();
+        //         });
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .UseSerilog()
-                .ConfigureAppConfiguration((hostingContext, config) =>
-                {
-                    // FONT: https://github.com/serilog/serilog-sinks-file
-                    // FONT: https://github.com/serilog/serilog-sinks-console
-                    // Serilog.Log.Logger = new Serilog.LoggerConfiguration()
-                    //     .WriteTo.Console()
-                    //     .WriteTo.File("log_service_api_.txt", 
-                    //         rollingInterval: RollingInterval.Day, 
-                    //         fileSizeLimitBytes: 666666, 
-                    //         rollOnFileSizeLimit: true
-                    //     )
-                    //     .CreateLogger();
-
-                    // Or
-
-                    // FONT: https://github.com/serilog/serilog-settings-configuration
-                    var appsettings = config.Build();
-                    Serilog.Log.Logger = new Serilog.LoggerConfiguration()
-                        .ReadFrom.Configuration(appsettings)
-                        .CreateLogger();
-                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.UseSerilog((hostingContext, loggerConfiguration) =>
+                    {
+                        loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration);
+                    });
                 });
 
     }

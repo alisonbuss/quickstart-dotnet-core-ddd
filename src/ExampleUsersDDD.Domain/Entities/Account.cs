@@ -1,30 +1,36 @@
 
 using System;
-using System.ComponentModel.DataAnnotations.Schema;
+
+using ExampleUsersDDD.Domain.Enums;
 
 namespace ExampleUsersDDD.Domain.Entities
 {
     public class Account : EntityBase
     {
+        private readonly string[] DEFAULT_RULES = new string[] {
+            "public", "visitant", "pre-registered"
+        };
+        
         public Account(
-            string email, string password, DateTime registered, bool isConfirmed, bool isActive, string group
-        ) : base()
+            string email, string password, string group
+        )
         {
             this.Email = email;
             this.Password = password;
-            this.Registered = registered;
-            this.IsConfirmed = isConfirmed;
-            this.IsActive = isActive;
             this.Group = group;
-
-            this.Roles = new string[] {"Admin", "Manager"};
+            this.Registered = DateTime.Today;
+            this.Status = AccountStatus.Created;
+            this.Roles = string.Join(",", this.DEFAULT_RULES);
         }
-
+        
         public Account(
-            int id, string email, string password, DateTime registered, bool isConfirmed, bool isActive, string group
-        ) : this(email, password, registered, isConfirmed, isActive, group)
+            int id, string email, string password, string group, DateTime registered, AccountStatus status, string roles
+        ) : this(email, password, group)
         {
             this.Id = id;
+            this.Registered = registered;
+            this.Status = status;
+            this.Roles = roles;
         }
 
         // Empty constructor for EF
@@ -32,18 +38,15 @@ namespace ExampleUsersDDD.Domain.Entities
 
         public string Email { get; private set; }
 
-        public string Password { get; private set; }
+        public string Password { get; set; }
 
         public DateTime Registered { get; private set; }
 
-        public bool IsConfirmed { get; set; }
+        public AccountStatus Status { get; set; }
 
-        public bool IsActive { get; set; }
-
-        public string Group { get; set; }
-        
-        [NotMapped]
-        public string[] Roles { get; private set; }
+        public string Group { get; private set; }
+     
+        public string Roles { get; private set; }
 
     }
 }

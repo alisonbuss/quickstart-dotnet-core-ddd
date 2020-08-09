@@ -1,10 +1,11 @@
 ﻿
 namespace ExampleUsersDDD.Domain.Enums
 {
-    public enum TaskStatus
+    public enum AccountStatus
     {
         Created,
         Active,
-        Done
+        Disabled,
+        Blocked
     }
 }

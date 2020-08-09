@@ -66,12 +66,22 @@ namespace ExampleUsersDDD.Service.API
             // Use initial database configurations.
             app.UseDatabaseConfiguration(env, dbContextBase);
 
+            // Serve the static photos of registered users.
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "StaticFiles/photos")),
+                OnPrepareResponse = ctx => {
+                    ctx.Context.Response.Headers.Append("Cache-Control", "public, max-age=666");
+                },
+                RequestPath = "/static/photos"
+            });
+
             // Serve static files.
             app.UseFileServer(new FileServerOptions
             {
                 FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "StaticFiles/public")),
-                RequestPath = "/doc",
-                EnableDirectoryBrowsing = true
+                EnableDirectoryBrowsing = true,
+                RequestPath = "/web",
             });
 
             app.UseRouting();

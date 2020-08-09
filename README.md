@@ -42,7 +42,7 @@ ADICIONAR DEPENDÊNCIA DO PROJETO:
 ADD PROJECT DEPENDENCY:
 
 
-
+dotnet new classlib --name "ExampleUsersDDD.Common" --output "./src/ExampleUsersDDD.Common" --framework "netcoreapp3.1";
 
 
 ADICIONAR DEPENDÊNCIA DO PACOTE:

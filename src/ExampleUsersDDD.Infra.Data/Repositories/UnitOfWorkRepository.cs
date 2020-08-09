@@ -54,6 +54,10 @@ namespace ExampleUsersDDD.Infra.Data.Repositories
             get { return this.repositoryProduct = this.repositoryProduct ?? new RepositoryProduct(this.dbContext); }
         }
 
-
+        private IRepositoryUser repositoryUser;
+        public  IRepositoryUser RepositoryUser
+        {
+            get { return this.repositoryUser = this.repositoryUser ?? new RepositoryUser(this.dbContext); }
+        }
     }
 }

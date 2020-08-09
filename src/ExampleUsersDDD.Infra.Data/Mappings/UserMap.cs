@@ -35,7 +35,7 @@ namespace ExampleUsersDDD.Infra.Data.Mappings
                 .IsRequired();
 
             builder.Property(entity => entity.Password)
-                .HasColumnName("HashPassword") // Hash Algorithm: SHA256
+                .HasColumnName("PasswordHash") // Hash Algorithm: SHA256
                 .HasColumnType("varchar(66)")
                 .HasMaxLength(66)
                 .IsRequired();
@@ -44,14 +44,10 @@ namespace ExampleUsersDDD.Infra.Data.Mappings
                 .HasColumnType("datetime")
                 .IsRequired();
 
-            builder.Property(entity => entity.IsConfirmed)
-                .HasColumnName("Confirmed")
-                .HasColumnType("bit")
-                .IsRequired();
-
-            builder.Property(entity => entity.IsActive)
-                .HasColumnName("Active")
-                .HasColumnType("bit")
+            builder.Property(entity => entity.Status)
+                .HasConversion<string>() // Convert Enum to String
+                .HasColumnType("varchar(13)")
+                .HasMaxLength(13)
                 .IsRequired();
 
             builder.Property(entity => entity.Group)
@@ -59,11 +55,15 @@ namespace ExampleUsersDDD.Infra.Data.Mappings
                 .HasMaxLength(66)
                 .IsRequired();
 
-            builder.Ignore(entity => entity.Roles);
+            builder.Property(entity => entity.Roles)
+                .HasColumnType("varchar(99)")
+                .HasMaxLength(99);
 
             // Columns - User:
             builder.Property(entity => entity.Photo)
-                .HasColumnType("varbinary(max)");
+                //.HasColumnType("varbinary(max)");
+                .HasColumnType("varchar(77)")
+                .HasMaxLength(77);
 
             builder.Property(entity => entity.Nickname)
                 .HasColumnType("varchar(66)")
@@ -73,9 +73,11 @@ namespace ExampleUsersDDD.Infra.Data.Mappings
                 .HasColumnType("varchar(66)")
                 .HasMaxLength(66);
 
-            builder.Property(entity => entity.FullName)
+            builder.Property(entity => entity.LastName)
                 .HasColumnType("varchar(99)")
                 .HasMaxLength(99);
+
+            builder.Ignore(entity => entity.FullName);
 
             builder.Property(entity => entity.Phone)
                 .HasColumnType("varchar(18)")

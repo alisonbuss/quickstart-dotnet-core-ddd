@@ -25,11 +25,13 @@ namespace ExampleUsersDDD.Infra.Data.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new ProductMap());
+            modelBuilder.ApplyConfiguration(new UserMap());
                         
             base.OnModelCreating(modelBuilder);
         }
 
         public DbSet<Product> Product { get; set; }
+        public DbSet<User> User { get; set; }
 
     }
 

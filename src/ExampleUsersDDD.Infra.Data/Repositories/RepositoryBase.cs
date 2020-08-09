@@ -31,24 +31,18 @@ namespace ExampleUsersDDD.Infra.Data.Repositories
 
         public virtual async Task<IEnumerable<TEntity>> GetAll()
         {
-            return await this.dbSet.AsNoTracking().ToListAsync();
+            var list = await this.dbSet.AsNoTracking()
+                                       .ToListAsync()
+                                       .ConfigureAwait(false);
+            return list;
         }
-
-        // public async Task<IUser> GetUser(ExternalUserId externalUserId)
-        // {
-        //     User user = await this._context
-        //         .Users
-        //         .Where(a => a.ExternalUserId.Equals(externalUserId))
-        //         .SingleOrDefaultAsync()
-        //         .ConfigureAwait(false);
-
-        //     return user;
-        // }
-
 
         public virtual async Task<TEntity> GetById(int id)
         {
-            return await this.dbSet.AsNoTracking().FirstOrDefaultAsync(entity => entity.Id == id);
+            var entity = await this.dbSet.AsNoTracking()
+                                         .FirstOrDefaultAsync(entity => entity.Id == id)
+                                         .ConfigureAwait(false);
+            return entity;
         }
 
         // Writing(Persistence):
@@ -58,7 +52,7 @@ namespace ExampleUsersDDD.Infra.Data.Repositories
             if (entity == null) 
                 throw new ArgumentNullException(nameof(entity));
 
-            await this.dbSet.AddAsync(entity);
+            await this.dbSet.AddAsync(entity).ConfigureAwait(false);;
 
             return entity;
         }
@@ -76,7 +70,7 @@ namespace ExampleUsersDDD.Infra.Data.Repositories
 
             this.dbSet.Update(currentEntity);
 
-            return await Task.FromResult<TEntity>(currentEntity);
+            return await Task.FromResult<TEntity>(currentEntity).ConfigureAwait(false);
         }
 
         public virtual async Task Remove(TEntity entity)
@@ -90,7 +84,7 @@ namespace ExampleUsersDDD.Infra.Data.Repositories
 
             this.dbSet.Remove(currentEntity);
 
-            await Task.CompletedTask;
+            await Task.CompletedTask.ConfigureAwait(false);
         }
 
     }

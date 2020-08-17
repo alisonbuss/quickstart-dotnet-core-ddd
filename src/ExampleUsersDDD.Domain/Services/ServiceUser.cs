@@ -2,7 +2,6 @@
 using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Microsoft.Extensions.Logging;
 
 using ExampleUsersDDD.Common.Implementations;
 
@@ -53,7 +52,10 @@ namespace ExampleUsersDDD.Domain.Services
             }
             catch (Exception exception)
             {
-                await this.kraken.Rollback(); throw exception;
+                await this.kraken.Rollback();
+                this.NewNotification("ServiceUser.ModifUserStatus", $"Exception: {exception.Message}");
+
+                return await Task.FromResult<User>(null);
             }
         }
 
@@ -107,7 +109,10 @@ namespace ExampleUsersDDD.Domain.Services
             }
             catch (Exception exception)
             {
-                await this.kraken.Rollback(); throw exception;
+                await this.kraken.Rollback();
+                this.NewNotification("ServiceUser.CreateUserAccount", $"Exception: {exception.Message}");
+
+                return await Task.FromResult<User>(user);
             }
         }
 
@@ -151,46 +156,57 @@ namespace ExampleUsersDDD.Domain.Services
             }
             catch (Exception exception)
             {
-                await this.kraken.Rollback(); throw exception;
+                await this.kraken.Rollback();
+                this.NewNotification("ServiceUser.UpdateUserData", $"Exception: {exception.Message}");
+
+                return await Task.FromResult<User>(user);
             }
         }
 
-        public async Task DeleteUserAccount(User user)
+        public async Task DeleteUserAccount(int id)
         {
             try
             {
-                if (user == null) 
+                var currentUser = await this.GetUserById((int) id);
+
+                if (currentUser == null) 
                 {
-                    this.NewNotification("User", "The set user is null.");
-                    await Task.CompletedTask.ConfigureAwait(false);;
+                    this.NewNotification("User", "It was not possible to find the User to perform the remove.");
+                    await Task.CompletedTask.ConfigureAwait(false);
                 } 
                 else
                 {
-                    await this.kraken.RepositoryUser.Remove(user);
+                    await this.kraken.RepositoryUser.Remove(currentUser);
                     await this.kraken.Commit();
                 }
             }
             catch (Exception exception)
             {
-                await this.kraken.Rollback(); throw exception;
+                await this.kraken.Rollback();
+                this.NewNotification("ServiceUser.DeleteUserAccount", $"Exception: {exception.Message}");
+
+                await Task.CompletedTask.ConfigureAwait(false);
             }
         }
 
-        public async Task ChangePasswordFromUserAccount(User user, string currentPassword, string newPassword)
+        public async Task ChangePasswordFromUserAccount(int id, string currentPassword, string newPassword)
         {
             try
             {
-                if (user == null) 
+                var currentUser = await this.GetUserById((int) id);
+
+                if (currentUser == null) 
                 {
-                    this.NewNotification("User", "The set user is null.");
-                    await Task.CompletedTask.ConfigureAwait(false);;
+                    this.NewNotification("User", "It was not possible to find the User to perform the Password Change.");
+                    await Task.CompletedTask.ConfigureAwait(false);
                 } 
                 else
                 {
-                    var currentUser = await this.kraken.RepositoryUser.GetById(user.Id);
-
                     if(currentUser.Password != currentPassword)
-                        this.NewNotification("Password", "The password passed by the current user is invalid.");
+                    {
+                        this.NewNotification("User", "The data passed by the current User is invalid.");
+                        await Task.CompletedTask.ConfigureAwait(false);
+                    }
 
                     currentUser.Password = newPassword;
 
@@ -200,7 +216,10 @@ namespace ExampleUsersDDD.Domain.Services
             }
             catch (Exception exception)
             {
-                await this.kraken.Rollback(); throw exception;
+                await this.kraken.Rollback();
+                this.NewNotification("ServiceUser.ChangePasswordFromUserAccount", $"Exception: {exception.Message}");
+
+                await Task.CompletedTask.ConfigureAwait(false);
             }
         }
         

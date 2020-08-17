@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "f50d6475-0bb6-4d42-8228-15cb809c2e78",
+		"_postman_id": "34a510e4-3b1e-460d-9274-f5b25ad91158",
 		"name": "ExampleUsersDDD",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -22,20 +22,40 @@
 			"response": []
 		},
 		{
-			"name": "Static File - Doc",
+			"name": "Static File - Web",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:5000/doc/",
+					"raw": "http://localhost:5000/web",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "5000",
 					"path": [
-						"doc",
-						""
+						"web"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Static File - Photos",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/static/photos/photo-lucifer.jpg",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"static",
+						"photos",
+						"photo-lucifer.jpg"
 					]
 				}
 			},
@@ -47,7 +67,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:5000/api/v1/products",
+					"raw": "http://localhost:5000/api/v1/users",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -56,7 +76,30 @@
 					"path": [
 						"api",
 						"v1",
-						"products"
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ReadAllByStatus",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/v1/users/status/Created",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"status",
+						"Created"
 					]
 				}
 			},
@@ -68,7 +111,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:5000/api/v1/products/1",
+					"raw": "http://localhost:5000/api/v1/users/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -77,8 +120,30 @@
 					"path": [
 						"api",
 						"v1",
-						"products",
+						"users",
 						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ReadByEmail",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/v1/users/lucifer@formhell.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"lucifer@formhell.com"
 					]
 				}
 			},
@@ -91,7 +156,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Name A\",\n\t\"price\": 1.3,\n\t\"isActive\": true,\n\t\"description\": \"Description\"\n}",
+					"raw": "{\n    \"email\": \"new_lord_darkness@formhell.com\",\n    \"password\": \"NewP@ssw0rdT0He11666\",\n    \"group\": \"Fallen Angels\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -99,7 +164,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:5000/api/v1/products",
+					"raw": "http://localhost:5000/api/v1/users",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -108,7 +173,104 @@
 					"path": [
 						"api",
 						"v1",
-						"products"
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Activate",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"password\": \"Testing666!\",\n\t\"confirmPassword\": \"Testing666!\",\n\t\"newPassword\": \"NewTesting666!\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/v1/users/1/activate",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"1",
+						"activate"
+					]
+				},
+				"description": "Activate a particular User."
+			},
+			"response": []
+		},
+		{
+			"name": "Disable",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"password\": \"Testing666!\",\n\t\"confirmPassword\": \"Testing666!\",\n\t\"newPassword\": \"NewTesting666!\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/v1/users/1/disable",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"1",
+						"disable"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Block",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"password\": \"Testing666!\",\n\t\"confirmPassword\": \"Testing666!\",\n\t\"newPassword\": \"NewTesting666!\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/v1/users/1/block",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"1",
+						"block"
 					]
 				}
 			},
@@ -121,7 +283,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"id\": 1,\n\t\"name\": \"Name A Update\",\n\t\"price\": 1.3,\n\t\"isActive\": true,\n\t\"description\": \"Description Update\"\n}",
+					"raw": "{\n\t\"id\": 1,\n\t\"email\": \"new_lord_darkness@formhell.com\",\n\t\"group\": \"Fallen Angels 2\",\n\t\"status\": \"\",\n\t\"roles\": \"\",\n\t\"photo\": \"\",\n\t\"nickname\": \"\",\n\t\"firstName\": \"\",\n\t\"lastName\": \"\",\n\t\"phone\": \"\",\n\t\"birthDate\": \"\",\n\t\"gender\": \"\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -129,7 +291,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:5000/api/v1/products",
+					"raw": "http://localhost:5000/api/v1/users",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -138,7 +300,38 @@
 					"path": [
 						"api",
 						"v1",
-						"products"
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ChangePassword",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"password\": \"P@ssw0rdT0He11666\",\n\t\"confirmPassword\": \"P@ssw0rdT0He11666\",\n\t\"newPassword\": \"NewTesting666!\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/v1/users/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"1"
 					]
 				}
 			},
@@ -150,7 +343,7 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:5000/api/v1/products/2",
+					"raw": "http://localhost:5000/api/v1/users/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -159,8 +352,8 @@
 					"path": [
 						"api",
 						"v1",
-						"products",
-						"2"
+						"users",
+						"1"
 					]
 				}
 			},

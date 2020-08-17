@@ -18,7 +18,7 @@ namespace ExampleUsersDDD.Application.Mappers
             CreateMap<User, DtoUser>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(x => x.Id))
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(x => x.Email))
-                .ForMember(dest => dest.Password, opt => opt.MapFrom(x => x.Password))
+                .ForMember(dest => dest.Password, opt => opt.Ignore())
                 .ForMember(dest => dest.Group, opt => opt.MapFrom(x => x.Group));
         }
 

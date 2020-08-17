@@ -1,5 +1,6 @@
 
 using System;
+
 using ExampleUsersDDD.Domain.Enums;
 
 namespace ExampleUsersDDD.Domain.Entities

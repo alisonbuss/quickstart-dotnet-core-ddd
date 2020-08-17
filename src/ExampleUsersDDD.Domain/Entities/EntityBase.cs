@@ -1,9 +1,7 @@
 ﻿
-//using ExampleUsersDDD.Domain.Notifications;
-
 namespace ExampleUsersDDD.Domain.Entities
 {
-    public class EntityBase //: Notifies
+    public class EntityBase
     {
         public EntityBase(int id)
         {

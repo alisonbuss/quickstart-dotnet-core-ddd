@@ -26,8 +26,8 @@ namespace ExampleUsersDDD.Application.Interfaces
         Task<DtoUser> DisableUserAccount(int id);
         Task<DtoUser> BlockUserAccount(int id);
         Task<DtoUser> UpdateUserData(DtoUser user);
-        Task DeleteUserAccount(DtoUser user);
-        Task ChangePasswordFromUserAccount(DtoUser user, string currentPassword, string newPassword);
+        Task DeleteUserAccount(int id);
+        Task ChangePasswordFromUserAccount(int id, DtoChangePassword dtoChangePassword);
 
         // Consume Services:
         Task AddUserOnSession(DtoUser user);

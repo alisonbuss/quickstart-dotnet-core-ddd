@@ -2,7 +2,6 @@
 using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Microsoft.Extensions.Logging;
 
 using AutoMapper;
 
@@ -115,11 +114,9 @@ namespace ExampleUsersDDD.Application.Services
             return this.mapper.Map<DtoUser>(userModified);
         }
 
-        public async Task DeleteUserAccount(DtoUser dtoUser)
+        public async Task DeleteUserAccount(int id)
         {
-            var currentUser = this.mapper.Map<User>(dtoUser);
-
-            await this.serviceUser.DeleteUserAccount(currentUser);
+            await this.serviceUser.DeleteUserAccount(id);
 
             if(this.serviceUser.HasNotifications())
                 this.NewNotifications(this.serviceUser.Notifications());
@@ -127,11 +124,9 @@ namespace ExampleUsersDDD.Application.Services
             await Task.CompletedTask.ConfigureAwait(false);
         }
 
-        public async Task ChangePasswordFromUserAccount(DtoUser dtoUser, string currentPassword, string newPassword)
+        public async Task ChangePasswordFromUserAccount(int id, DtoChangePassword dtoChangePassword)
         {
-            var currentUser = this.mapper.Map<User>(dtoUser);
-
-            await this.serviceUser.ChangePasswordFromUserAccount(currentUser, currentPassword, newPassword);
+            await this.serviceUser.ChangePasswordFromUserAccount(id, dtoChangePassword.Password, dtoChangePassword.NewPassword);
 
             if(this.serviceUser.HasNotifications())
                 this.NewNotifications(this.serviceUser.Notifications());

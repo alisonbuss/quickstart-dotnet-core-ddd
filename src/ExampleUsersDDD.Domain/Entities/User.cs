@@ -12,7 +12,7 @@ namespace ExampleUsersDDD.Domain.Entities
         ) : base(email, password, group) {}
 
         public User(
-            int id, string email, string password, string group, DateTime registered, AccountStatus status, string roles
+            int id, string email, string password, string group, DateTime registered, AccountStatusEnum status, string roles
         ) : base(id, email, password, group, registered, status, roles) {}
 
         public User(
@@ -24,7 +24,7 @@ namespace ExampleUsersDDD.Domain.Entities
         }
 
         public User(
-            int id, string email, string password, string group, DateTime registered, AccountStatus status, string roles,
+            int id, string email, string password, string group, DateTime registered, AccountStatusEnum status, string roles,
             string photo, string nickname, string firstName, string lastName, string phone, DateTime? birthDate, char? gender
         ) : this(id, email, password, group, registered, status, roles)
         {

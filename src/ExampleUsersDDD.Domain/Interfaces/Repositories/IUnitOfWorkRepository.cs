@@ -12,7 +12,6 @@ namespace ExampleUsersDDD.Domain.Interfaces.Repositories
 
         Task Rollback();
         
-        IRepositoryProduct RepositoryProduct { get; }
         IRepositoryUser RepositoryUser { get; }
      
     }

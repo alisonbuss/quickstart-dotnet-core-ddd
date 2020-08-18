@@ -19,12 +19,12 @@ namespace ExampleUsersDDD.Domain.Entities
             this.Password = password;
             this.Group = group;
             this.Registered = DateTime.Today;
-            this.Status = AccountStatus.Created;
+            this.Status = AccountStatusEnum.Created;
             this.Roles = string.Join(",", this.DEFAULT_RULES);
         }
         
         public Account(
-            int id, string email, string password, string group, DateTime registered, AccountStatus status, string roles
+            int id, string email, string password, string group, DateTime registered, AccountStatusEnum status, string roles
         ) : this(email, password, group)
         {
             this.Id = id;
@@ -42,7 +42,7 @@ namespace ExampleUsersDDD.Domain.Entities
 
         public DateTime Registered { get; private set; }
 
-        public AccountStatus Status { get; set; }
+        public AccountStatusEnum Status { get; set; }
 
         public string Group { get; private set; }
      

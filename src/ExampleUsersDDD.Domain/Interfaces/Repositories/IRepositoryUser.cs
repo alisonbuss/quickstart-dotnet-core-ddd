@@ -11,7 +11,7 @@ namespace ExampleUsersDDD.Domain.Interfaces.Repositories
     {
         // Reading(Consultation):
         Task<User> GetByEmail(string email);
-        Task<IList<User>> GetAllByStatus(AccountStatus status);
+        Task<IList<User>> GetAllByStatus(AccountStatusEnum status);
 
     }
 }

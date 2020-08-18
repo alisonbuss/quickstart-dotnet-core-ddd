@@ -28,23 +28,21 @@ namespace ExampleUsersDDD.Infra.CrossCutting.IoC
 
             // Domain
             services.AddScoped(typeof(IServiceSession<>), typeof(ServiceSession<>));
-            services.AddScoped<IServiceProduct, ServiceProduct>();
             services.AddScoped<IServiceUser, ServiceUser>();
 
             // Infra - Data
             services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
-            services.AddScoped<IRepositoryProduct, RepositoryProduct>();
             services.AddScoped<IRepositoryUser, RepositoryUser>();
 
             // Infra - Data - Unit Of Work
             services.AddScoped<IUnitOfWorkRepository, UnitOfWorkRepository>();
 
             // Application - AutoMapper
-            services.AddAutoMapper(typeof(EntityToDtoMappingProduct), typeof(DtoToEntityMappingProduct));
             services.AddAutoMapper(typeof(EntityToDtoMappingUser), typeof(DtoToEntityMappingUser));
+            services.AddAutoMapper(typeof(EntityToDtoMappingUserRegistration), typeof(DtoToEntityMappingUserRegistration));
+            services.AddAutoMapper(typeof(EntityToDtoMappingUserUpdate), typeof(DtoToEntityMappingUserUpdate));
 
             // Application - AppService
-            services.AddScoped<IAppServiceProduct, AppServiceProduct>();
             services.AddScoped<IAppServiceUser, AppServiceUser>();
             
         }

@@ -11,8 +11,11 @@ namespace ExampleUsersDDD.Application.Dtos
     // 4, At least one special character [*.!@#$%^&(){}[]:;<>,.?/~_+-=|\]
     // 5, At least 8 characters in length, but no more than 32.
     //
-    // Regular Expression: ^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$
     // Regular Expression: ^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[*.!@$%^&(){}[]:;<>,.?/~_+-=|\]).{8,32}$
+    //
+    // OR:
+    //
+    // Regular Expression: ^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$
     // Regular Expression: ^((?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])|(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^a-zA-Z0-9])|(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[^a-zA-Z0-9])|(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^a-zA-Z0-9])).{8,}$
     //
     // Dissecting the pattern:

@@ -58,13 +58,11 @@ namespace ExampleUsersDDD.Infra.Data.Context
             //     e => e.GetProperties().Where(p => p.ClrType == typeof(string))))
             //     property.SetColumnType("varchar(100)");
 
-            modelBuilder.ApplyConfiguration(new ProductMap());
             modelBuilder.ApplyConfiguration(new UserMap());
                         
             base.OnModelCreating(modelBuilder);
         }
 
-        public DbSet<Product> Product { get; set; }
         public DbSet<User> User { get; set; }
 
     }

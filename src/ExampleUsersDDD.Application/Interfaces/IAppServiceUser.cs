@@ -16,16 +16,16 @@ namespace ExampleUsersDDD.Application.Interfaces
     {
         // Reading(Consultation):
         Task<IEnumerable<DtoUser>> GetAllUsers();
-        Task<IEnumerable<DtoUser>> GetAllUsersByStatus(AccountStatus status);
+        Task<IEnumerable<DtoUser>> GetAllUsersByStatus(AccountStatusEnum status);
         Task<DtoUser> GetUserById(int id);
         Task<DtoUser> GetUserByEmail(string email);
 
         // Writing(Persistence):
-        Task<DtoUser> CreateUserAccount(DtoUser user);
+        Task<DtoUser> CreateUserAccount(DtoUserRegistration user);
         Task<DtoUser> ActivateUserAccount(int id);
         Task<DtoUser> DisableUserAccount(int id);
         Task<DtoUser> BlockUserAccount(int id);
-        Task<DtoUser> UpdateUserData(DtoUser user);
+        Task<DtoUser> UpdateUserData(DtoUserUpdate user);
         Task DeleteUserAccount(int id);
         Task ChangePasswordFromUserAccount(int id, DtoChangePassword dtoChangePassword);
 

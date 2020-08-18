@@ -18,14 +18,11 @@ namespace ExampleUsersDDD.Application.Services
 {
     public class AppServiceUser : Notify, IAppServiceUser
     {
-        //private readonly ILogger logger;
         private readonly IMapper mapper;
         private readonly IServiceUser serviceUser;
 
-        public AppServiceUser(
-            IMapper mapper, IServiceUser serviceUser)
+        public AppServiceUser(IMapper mapper, IServiceUser serviceUser)
         {
-            //this.logger = logger;
             this.mapper = mapper;
             this.serviceUser = serviceUser;
         }
@@ -38,7 +35,7 @@ namespace ExampleUsersDDD.Application.Services
             );
         }
 
-        public async Task<IEnumerable<DtoUser>> GetAllUsersByStatus(AccountStatus status)
+        public async Task<IEnumerable<DtoUser>> GetAllUsersByStatus(AccountStatusEnum status)
         {
             return this.mapper.Map<IEnumerable<DtoUser>>(
                 await this.serviceUser.GetAllUsersByStatus(status)
@@ -60,7 +57,7 @@ namespace ExampleUsersDDD.Application.Services
         }
 
         // Writing(Persistence):
-        public async Task<DtoUser> CreateUserAccount(DtoUser dtoUser)
+        public async Task<DtoUser> CreateUserAccount(DtoUserRegistration dtoUser)
         {
             var currentUser = this.mapper.Map<User>(dtoUser);
 
@@ -102,7 +99,7 @@ namespace ExampleUsersDDD.Application.Services
             return this.mapper.Map<DtoUser>(user);
         }
         
-        public async Task<DtoUser> UpdateUserData(DtoUser dtoUser)
+        public async Task<DtoUser> UpdateUserData(DtoUserUpdate dtoUser)
         {
             var currentUser = this.mapper.Map<User>(dtoUser);
 

@@ -1,7 +1,7 @@
 ﻿
 namespace ExampleUsersDDD.Domain.Enums
 {
-    public enum AccountStatus
+    public enum AccountStatusEnum
     {
         Created,
         Active,

@@ -65,7 +65,7 @@ namespace ExampleUsersDDD.Service.API.Endpoints.V1
                 return BadRequest("Error: The user STATUS is empty!");
 
             // Case Insensitive:
-            AccountStatus accountStatus = (AccountStatus) Enum.Parse(typeof(AccountStatus), status, true);
+            AccountStatusEnum accountStatus = (AccountStatusEnum) Enum.Parse(typeof(AccountStatusEnum), status, true);
 
             var models = await this.appServiceUser.GetAllUsersByStatus(accountStatus);
 
@@ -110,7 +110,7 @@ namespace ExampleUsersDDD.Service.API.Endpoints.V1
         // POST: api/v1/users
         [HttpPost]
         [Route("")]
-        public async Task<ActionResult<DtoUser>> Create([FromBody] DtoUser model)
+        public async Task<ActionResult<DtoUser>> Create([FromBody] DtoUserRegistration model)
         {
             Logger.LogInformation("UserController.Create: POST: api/v1/users");
 
@@ -179,7 +179,7 @@ namespace ExampleUsersDDD.Service.API.Endpoints.V1
         // PUT: api/v1/users
         [HttpPut]
         [Route("")]
-        public async Task<ActionResult<DtoUser>> Update([FromBody] DtoUser model)
+        public async Task<ActionResult<DtoUser>> Update([FromBody] DtoUserUpdate model)
         {
             Logger.LogInformation("UserController.Update: PUT: api/v1/users");
 

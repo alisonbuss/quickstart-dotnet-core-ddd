@@ -14,7 +14,7 @@ namespace  ExampleUsersDDD.Domain.Interfaces.Services
     {
         // Reading(Consultation):
         Task<IEnumerable<User>> GetAllUsers();
-        Task<IEnumerable<User>> GetAllUsersByStatus(AccountStatus status);
+        Task<IEnumerable<User>> GetAllUsersByStatus(AccountStatusEnum status);
         Task<User> GetUserById(int id);
         Task<User> GetUserByEmail(string email);
 

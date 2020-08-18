@@ -31,7 +31,7 @@ namespace ExampleUsersDDD.Infra.Data.Repositories
             return user;
         }
 
-        public async Task<IList<User>> GetAllByStatus(AccountStatus status)
+        public async Task<IList<User>> GetAllByStatus(AccountStatusEnum status)
         {
             var users = await this.dbSet.Where(user => user.Status == status)
                                         .ToListAsync()

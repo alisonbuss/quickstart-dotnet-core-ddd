@@ -6,16 +6,16 @@ using ExampleUsersDDD.Application.Dtos;
 
 namespace ExampleUsersDDD.Application.Mappers
 {
-    public class EntityToDtoMappingUser : Profile
+    public class EntityToDtoMappingUserUpdate : Profile
     {
-        public EntityToDtoMappingUser()
+        public EntityToDtoMappingUserUpdate()
         {
-            EntityToDtoMapping();
+            this.EntityToDtoMapping();
         }
 
         private void EntityToDtoMapping()
         {
-            CreateMap<User, DtoUser>()
+            CreateMap<User, DtoUserUpdate>()
                 .ForMember(dto => dto.Id,         opt => opt.MapFrom(entity => entity.Id))
                 .ForMember(dto => dto.Email,      opt => opt.MapFrom(entity => entity.Email))
                 .ForMember(dto => dto.Photo,      opt => opt.MapFrom(entity => entity.Photo))
@@ -26,7 +26,6 @@ namespace ExampleUsersDDD.Application.Mappers
                 .ForMember(dto => dto.BirthDate,  opt => opt.MapFrom(entity => entity.BirthDate))
                 .ForMember(dto => dto.Gender,     opt => opt.MapFrom(entity => entity.Gender))
                 .ForMember(dto => dto.Status,     opt => opt.MapFrom(entity => entity.Status))
-                .ForMember(dto => dto.Registered, opt => opt.MapFrom(entity => entity.Registered))
                 .ForMember(dto => dto.Group,      opt => opt.MapFrom(entity => entity.Group))
                 .ForMember(dto => dto.Roles,      opt => opt.MapFrom(entity => entity.Roles));
         }

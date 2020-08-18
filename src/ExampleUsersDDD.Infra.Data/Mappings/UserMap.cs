@@ -74,8 +74,8 @@ namespace ExampleUsersDDD.Infra.Data.Mappings
                 .HasMaxLength(66);
 
             builder.Property(entity => entity.LastName)
-                .HasColumnType("varchar(99)")
-                .HasMaxLength(99);
+                .HasColumnType("varchar(66)")
+                .HasMaxLength(66);
 
             builder.Ignore(entity => entity.FullName);
 

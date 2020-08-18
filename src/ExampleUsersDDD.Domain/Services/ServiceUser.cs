@@ -31,7 +31,7 @@ namespace ExampleUsersDDD.Domain.Services
             return user != null;
         }
 
-        private async Task<User> ModifUserStatus(int id, AccountStatus status)
+        private async Task<User> ModifUserStatus(int id, AccountStatusEnum status)
         {
             try
             {
@@ -65,7 +65,7 @@ namespace ExampleUsersDDD.Domain.Services
             return await this.kraken.RepositoryUser.GetAll();
         }
 
-        public async Task<IEnumerable<User>> GetAllUsersByStatus(AccountStatus status)
+        public async Task<IEnumerable<User>> GetAllUsersByStatus(AccountStatusEnum status)
         {
             return await this.kraken.RepositoryUser.GetAllByStatus(status);
         }
@@ -118,17 +118,17 @@ namespace ExampleUsersDDD.Domain.Services
 
         public async Task<User> ActivateUserAccount(int id)
         {
-            return await this.ModifUserStatus(id, AccountStatus.Active);
+            return await this.ModifUserStatus(id, AccountStatusEnum.Active);
         }
 
         public async Task<User> DisableUserAccount(int id)
         {
-            return await this.ModifUserStatus(id, AccountStatus.Disabled);
+            return await this.ModifUserStatus(id, AccountStatusEnum.Disabled);
         }
 
         public async Task<User> BlockUserAccount(int id)
         {
-            return await this.ModifUserStatus(id, AccountStatus.Blocked);
+            return await this.ModifUserStatus(id, AccountStatusEnum.Blocked);
         }
         
         public async Task<User> UpdateUserData(User user)

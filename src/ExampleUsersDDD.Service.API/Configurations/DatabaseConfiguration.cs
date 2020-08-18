@@ -23,16 +23,16 @@ namespace ExampleUsersDDD.Service.API.Configurations
             if (services == null) 
                 throw new ArgumentNullException(nameof(services));
 
-            // services.AddDbContext<DbContextBase>(options =>
-            //         options.UseInMemoryDatabase(databaseName: "InMemoryDataSource"));
+            services.AddDbContext<DbContextBase>(options =>
+                    options.UseInMemoryDatabase(databaseName: "InMemoryDataSource"));
 
             // Or:
             // services.AddDbContext<DbContextBase>(options =>
             //         options.UseSqlite(configuration.GetConnectionString("SqliteConnection")));
 
             // Or:
-            services.AddDbContext<DbContextBase>(options =>
-                    options.UseSqlServer(configuration.GetConnectionString("SqlServerConnection")));
+            // services.AddDbContext<DbContextBase>(options =>
+            //         options.UseSqlServer(configuration.GetConnectionString("SqlServerConnection")));
 
             services.AddScoped<DbContextBase, DbContextBase>();
         }

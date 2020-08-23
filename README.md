@@ -17,6 +17,9 @@ https://code-maze.com/filtering-aspnet-core-webapi/
 https://code-maze.com/searching-aspnet-core-webapi/
 https://github.com/Biarity/Sieve
 
+
+
+
 Operator	Meaning
 ==	        Equals
 !=	        Not equals

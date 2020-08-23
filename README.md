@@ -20,6 +20,11 @@ https://github.com/Biarity/Sieve
 
 
 
+
+
+
+
+
 Operator	Meaning
 ==	        Equals
 !=	        Not equals
@@ -37,6 +42,21 @@ _=*	        Case-insensitive string Starts with
 !=*	        Case-insensitive string Not equals
 !@=*	    Case-insensitive string does not Contains
 !_=*	    Case-insensitive string does not Starts with
+
+
+
+
+
+
+
+
+
+########################################## TEST
+
+
+
+
+
 
 
 
